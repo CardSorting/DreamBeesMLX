@@ -28,12 +28,7 @@ export default function AppContent() {
 
   useEffect(() => {
     const prefetchRoutes = () => {
-      void import('./pages/Generator');
-      if (currentUser) {
-        void import('./pages/UserProfile');
-      } else {
-        void import('./pages/Auth');
-      }
+      void import('./pages/UserProfile');
     };
 
     const requestIdle = window.requestIdleCallback;
