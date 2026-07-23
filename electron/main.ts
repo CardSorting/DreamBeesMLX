@@ -595,6 +595,36 @@ app.whenReady().then(() => {
   createWindow();
   tryInitDatabase();
 
+  if (!modelDownloader) {
+    modelDownloader = new ModelDownloader(app.getPath('userData'));
+  }
+
+  modelDownloader.on('progress', (data) => {
+    if (mainWindow) {
+      mainWindow.webContents.send('mlx:progress', {
+        stage: `Downloading model weights (${data.progressPct}%)...`,
+        progress_pct: data.progressPct,
+        downloading_model_id: data.modelId,
+      });
+    }
+  });
+
+  modelDownloader.on('completed', (data) => {
+    if (mainWindow) {
+      mainWindow.webContents.send('mlx:complete', {
+        auto_provisioned_model_id: data.modelId,
+      });
+    }
+  });
+
+  modelDownloader.autoProvisionDefaultModel();
+
+  if (!sidecarSupervisor) {
+    const scriptPath = path.join(__dirname, 'mlx/mlx_image_daemon.py');
+    sidecarSupervisor = new SidecarSupervisor(scriptPath);
+    sidecarSupervisor.start();
+  }
+
   app.on('open-url', (event, url) => {
     event.preventDefault();
     handleDeepLink(url);

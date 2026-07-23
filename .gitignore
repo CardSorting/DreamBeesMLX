@@ -56,6 +56,10 @@ firebase-export*
 functions/.env
 
 # Credentials & Keys
+google-services.json
+**/google-services.json
+GoogleService-Info.plist
+**/GoogleService-Info.plist
 *-adminsdk-*.json
 service-account.json
 service_account.json

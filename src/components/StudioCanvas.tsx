@@ -17,7 +17,7 @@ export const StudioCanvas: React.FC = () => {
   const [steps, setSteps] = useState(4);
   const [guidanceScale, setGuidanceScale] = useState(3.5);
   const [seed, setSeed] = useState<number | ''>('');
-  const [selectedModel, setSelectedModel] = useState('flux2-klein-4b');
+  const [selectedModel, setSelectedModel] = useState('sana-2-sprint');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [progressPct, setProgressPct] = useState(0);
@@ -28,6 +28,13 @@ export const StudioCanvas: React.FC = () => {
 
   useEffect(() => {
     if (window.electronAPI?.mlx) {
+      window.electronAPI.mlx.listModels().then((models) => {
+        const readyModel = models.find((m) => m.status === 'ready');
+        if (readyModel) {
+          setSelectedModel(readyModel.id);
+        }
+      });
+
       const unsubProgress = window.electronAPI.mlx.onProgress((data: any) => {
         setIsGenerating(true);
         setProgressPct(data.progress_pct || 0);
@@ -37,6 +44,9 @@ export const StudioCanvas: React.FC = () => {
 
       const unsubComplete = window.electronAPI.mlx.onComplete((data: any) => {
         setIsGenerating(false);
+        if (data.auto_provisioned_model_id) {
+          setSelectedModel(data.auto_provisioned_model_id);
+        }
         if (data.output_path) {
           setResultImage(`file://${data.output_path}`);
         }
