@@ -31,21 +31,12 @@ obj/
 *.prod.log
 *.electron-builder.log
 
-# --- Firebase ---
+# --- Logs ---
 .firebase/
 .firestore/
+*.log
 firebase-debug.log*
 firestore-debug.log*
-ui-debug.log*
-functions-debug.log*
-firebase-export*
-.firebase-export*
-!firebase.json
-!firestore.rules
-!firestore.indexes.json
-!database.rules.json
-!.firebaserc
-!.firebaseignore
 
 # --- Environment / Secrets ---
 .env

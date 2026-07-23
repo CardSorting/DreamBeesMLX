@@ -28,8 +28,7 @@ import {
 } from '../lib/generationFlow';
 import { normalizeAspectRatio } from '../lib/aspectRatios';
 import toast from '../utils/lazyToast';
-import { getFirebaseClient, getFunctionsInstance } from '../firebaseLazy';
-import type { User } from 'firebase/auth';
+type User = { uid: string; displayName?: string; email?: string } | null;
 import { AIModel, getOptimizedImageUrl, sanitizeInput, idleSaveToLocalStorage } from '../lite-utils';
 
 const BUILTIN_MODELS: AIModel[] = [
@@ -185,26 +184,12 @@ const isClientGenerationModel = (model: AIModel) => {
     return model.isActive !== false && GENERATION_MODEL_TYPES.has(type);
 };
 
-const getApiCallable = async (options?: { timeout?: number }) => {
-    const [{ httpsCallable }, functions] = await Promise.all([
-        import('firebase/functions'),
-        getFunctionsInstance(),
-    ]);
-    return httpsCallable(functions, 'api', options);
+const getApiCallable = async () => {
+    throw new Error('Cloud functions are deprecated; using local MLX engine');
 };
 
 const loadFirebaseRuntime = async () => {
-    const [client, authModule, firestoreModule] = await Promise.all([
-        getFirebaseClient(),
-        import('firebase/auth'),
-        import('firebase/firestore'),
-    ]);
-
-    return {
-        ...client,
-        ...authModule,
-        ...firestoreModule,
-    };
+    return null;
 };
 
 type FirebaseRuntime = Awaited<ReturnType<typeof loadFirebaseRuntime>>;
@@ -1065,21 +1050,15 @@ export function LiteProvider({ children }: { children: ReactNode }) {
         if (res.user) {
             // Explicit initialization call to ensure backend consistency
             try {
-                const apiCall = await getApiCallable();
-                await apiCall({ 
-                    action: 'initializeUser', 
-                    birthday 
-                });
+                if (runtime?.createUserWithEmailAndPassword) {
+                    await runtime.setDoc(runtime.doc(runtime.db, 'users', res.user.uid), {
+                        email,
+                        birthday,
+                        tier: 'free',
+                    });
+                }
             } catch (err) {
-                console.error('[Lite] User initialization failed:', err);
-                // Fallback to local set if API fails (but JIT will catch it later anyway)
-                await runtime.setDoc(runtime.doc(runtime.db, 'users', res.user.uid), {
-                    email,
-                    birthday,
-                    createdAt: runtime.serverTimestamp(),
-                    tier: 'free',
-                    zaps: 10
-                }, { merge: true });
+                console.error('[Lite] Local user init:', err);
             }
         }
     };
@@ -1214,7 +1193,7 @@ export function LiteProvider({ children }: { children: ReactNode }) {
             return Promise.resolve(false);
         }
 
-        return new Promise<boolean>((resolve) => {
+        return new Promise<boolean>(async (resolve) => {
         let promiseResolved = false;
         const safeResolve = (value: boolean) => {
             if (promiseResolved) return;
@@ -1243,7 +1222,6 @@ export function LiteProvider({ children }: { children: ReactNode }) {
             prompt: cleanPrompt,
             startedAt,
             userId: uid,
-            aspectRatio: requestAspectRatio,
         });
         toast.loading(messageForStage('submitting'), { id: requestId });
 
@@ -1251,193 +1229,32 @@ export function LiteProvider({ children }: { children: ReactNode }) {
             setZaps(prev => typeof prev === 'number' ? Math.max(0, prev - estimatedCost) : prev);
         }
 
-        let jobUnsub: (() => void) | null = null;
-        let idleTick: ReturnType<typeof setInterval> | null = null;
-        const softTimeoutIds: ReturnType<typeof setTimeout>[] = [];
-        let settled = false;
-        let apiAccepted = false;
-        let sawQueueDoc = false;
-        let progressFloor = 10;
-        let lastToastMessage = messageForStage('submitting');
-
-        const rollbackCredits = () => {
-            if (estimatedCost > 0) {
-                setZaps(prev => typeof prev === 'number' ? prev + estimatedCost : prev);
-            }
-        };
-
-        const finishSession = (options?: { keepPending?: boolean; keepListener?: boolean }) => {
-            softTimeoutIds.forEach(clearTimeout);
-            if (idleTick) clearInterval(idleTick);
-            idleTick = null;
-            if (!options?.keepListener && jobUnsub) {
-                jobUnsub();
-                jobUnsub = null;
-            }
-            generatingRef.current = false;
-            if (!options?.keepPending) clearPending();
-            if (generationSessionRef.current === finishSession && !options?.keepListener) {
-                generationSessionRef.current = null;
-            }
-        };
-
-        const failGeneration = (message: string, rollback = !apiAccepted, keepPending = false) => {
-            if (settled) return;
-            settled = true;
-            finishSession({ keepPending });
-            if (rollback) rollbackCredits();
-            resetGenerationUi();
-            toast.error(message, { id: requestId });
-            setConsecutiveFailures(prev => {
-                const next = prev + 1;
-                if (next >= 3) setCooldownUntil(Date.now() + 120000);
-                return next;
-            });
-            safeResolve(false);
-        };
-
-        const succeedGeneration = async (data: { imageUrl: string; firestoreImageId?: string }) => {
-            if (settled) return;
-
-            setGenerationProgress(100);
+        if (window.electronAPI?.mlx) {
             try {
-                const entry = await finalizeClaimedPendingJob({
-                    claimRef: completionClaimRef,
-                    requestId,
+                await window.electronAPI.mlx.generateImage({
                     prompt: cleanPrompt,
-                    imageUrl: data.imageUrl,
-                    userId: uid,
-                    modelId: selectedModel.id,
-                    params: requestParams,
-                    firestoreImageId: data.firestoreImageId,
+                    modelId: selectedModel?.id || 'flux2-klein-4b',
+                    width: 1024,
+                    height: 1024,
+                    steps: 4,
+                    guidanceScale: 3.5,
                 });
-                if (!entry) {
-                    settled = true;
-                    finishSession();
-                    resetGenerationUi();
-                    safeResolve(true);
-                    return;
-                }
-                settled = true;
-                finishSession();
+                generatingRef.current = false;
                 resetGenerationUi();
-                commitPendingToLocalState(entry, requestId);
-                setConsecutiveFailures(0);
-                // Zaps are already kept in sync by the onSnapshot listener on users/{uid}
-                safeResolve(true);
+                toast.success('Artwork created on local Apple GPU!', { id: requestId });
+                return true;
             } catch (err) {
-                console.warn('[Lite] Could not save picture locally:', err);
-                toast.error(
-                    'Picture finished, but could not save on this device. Check your account online.',
-                    { id: requestId }
-                );
-                safeResolve(false);
-            }
-        };
-
-        generationSessionRef.current = finishSession;
-
-        idleTick = setInterval(() => {
-            if (settled || sawQueueDoc) return;
-            progressFloor = smoothIdleProgress(progressFloor);
-            setGenerationProgress(progressFloor);
-        }, 700);
-
-        softTimeoutIds.push(
-            setTimeout(() => {
-                if (settled || sawQueueDoc) return;
-                if (apiAccepted) {
-                    progressFloor = monotonicProgress(progressFloor, 32);
-                    setGenerationProgress(progressFloor);
-                    lastToastMessage = IN_LINE_MESSAGE;
-                    toast.loading(IN_LINE_MESSAGE, { id: requestId });
-                } else {
-                    lastToastMessage = SLOW_START_MESSAGE;
-                    toast.loading(SLOW_START_MESSAGE, { id: requestId });
-                }
-            }, 8000),
-            setTimeout(() => {
-                if (!settled) toast.loading(LONG_RUNNING_MESSAGE, { id: requestId });
-            }, 60000),
-            setTimeout(() => {
-                if (!settled) toast.loading(LONG_RUNNING_MESSAGE, { id: requestId });
-            }, 120000)
-        );
-
-        jobUnsub = attachGenerationSession(runtime.db, {
-            requestId,
-            startedAt,
-            initialProgressFloor: progressFloor,
-            expectedUserId: uid,
-            onProgress: (patch) => {
-                sawQueueDoc = true;
-                progressFloor = patch.progress;
-                setGenerationStage(patch.stage);
-                setGenerationProgress(patch.progress);
-
-                if (patch.message !== lastToastMessage) {
-                    lastToastMessage = patch.message;
-                    toast.loading(patch.message, { id: requestId });
-                }
-
-                if (patch.previewUrl) {
-                    setGenerationPreviewUrl(patch.previewUrl);
-                    if (!patch.previewUrl.startsWith('data:')) {
-                        preloadImage(getOptimizedImageUrl(patch.previewUrl) || patch.previewUrl);
-                    }
-                }
-            },
-            onSuccess: (payload) => {
-                succeedGeneration(payload);
-            },
-            onFailed: (message) => {
-                failGeneration(
-                    message || "Something went wrong. Your credits were returned.",
-                    false
-                );
-            },
-            onHardTimeout: () => {
-                if (settled) return;
-                finishSession({ keepPending: true, keepListener: true });
-                generationSessionRef.current = () => {
-                    if (jobUnsub) {
-                        jobUnsub();
-                        jobUnsub = null;
-                    }
-                    generatingRef.current = false;
-                    generationSessionRef.current = null;
-                };
+                generatingRef.current = false;
                 resetGenerationUi();
-                toast.error('This took too long. Check your profile — it may still finish.', { id: requestId });
-                safeResolve(false);
-            },
-            onConnectionError: () => {
-                if (settled) return;
-                toast.loading('Reconnecting…', { id: requestId });
-            },
-        });
-
-        getApiCallable({ timeout: 120000 }).then((apiCall) => apiCall({ 
-            action: 'createGenerationRequest', 
-            prompt: cleanPrompt, 
-            modelId: selectedModel.id, 
-            requestId, 
-            ...requestParams 
-        })).then(() => {
-            if (settled) return;
-            apiAccepted = true;
-            progressFloor = monotonicProgress(progressFloor, 28);
-            setGenerationStage('queued');
-            setGenerationProgress(progressFloor);
-            if (lastToastMessage !== messageForStage('queued')) {
-                lastToastMessage = messageForStage('queued');
-                toast.loading(lastToastMessage, { id: requestId });
+                toast.error('Generation failed on local GPU', { id: requestId });
+                return false;
             }
-        }).catch((err: unknown) => {
-            failGeneration(parseCallableError(err));
+        }
+        generatingRef.current = false;
+        resetGenerationUi();
+        return false;
         });
-        });
-    }, [currentUser?.uid, selectedModel, isOffline, loadLocal, cooldownUntil, userTier, zaps, resetGenerationUi, clearPending, savePending, commitPendingToLocalState, firebase]);
+    }, [currentUser?.uid, selectedModel, isOffline, loadLocal, cooldownUntil, userTier, zaps, resetGenerationUi, clearPending, savePending, commitPendingToLocalState]);
 
     const loadMoreHistory = useCallback(() => {
         setHistoryLimit((prev) => Math.min(1000, prev + 50));
