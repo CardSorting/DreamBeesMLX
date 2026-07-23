@@ -1,0 +1,334 @@
+{
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "functions": {
+    "source": "functions",
+    "codebase": "default",
+    "runtime": "nodejs24",
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run build"
+    ]
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "site": "dreambees-alchemist",
+    "public": "web/out",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "predeploy": [
+      "npm run build:web:release:firebase"
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/dreamtrail",
+        "function": {
+          "functionId": "dreamtrail",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/admin/generation/**",
+        "function": {
+          "functionId": "adminGeneration",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/sitemap.xml",
+        "function": "web"
+      },
+      {
+        "source": "/robots.txt",
+        "function": "web"
+      },
+      {
+        "source": "/llms.txt",
+        "function": "web"
+      },
+      {
+        "source": "/api/**",
+        "function": "api"
+      },
+      {
+        "source": "/discovery/**",
+        "function": "web"
+      },
+      {
+        "source": "/v1/**",
+        "function": "web"
+      },
+      {
+        "source": "/model/**",
+        "function": "web"
+      },
+      {
+        "source": "/blog/**",
+        "function": "web"
+      },
+      {
+        "source": "/mockup-catalog/**",
+        "function": "web"
+      },
+      {
+        "source": "/tasks/**",
+        "function": "web"
+      },
+      {
+        "source": "/pricing/plans",
+        "function": "web"
+      },
+      {
+        "source": "/pricing/credits",
+        "function": "web"
+      },
+      {
+        "source": "/pricing/compare",
+        "function": "web"
+      },
+      {
+        "source": "/pricing/enterprise",
+        "function": "web"
+      },
+      {
+        "source": "/pricing/calculator",
+        "function": "web"
+      },
+      {
+        "source": "/pricing",
+        "function": "web"
+      },
+      {
+        "source": "/alternatives/**",
+        "function": "web"
+      },
+      {
+        "source": "/guides/**",
+        "function": "web"
+      },
+      {
+        "source": "/use-cases/**",
+        "function": "web"
+      }
+    ],
+    "redirects": [
+      { "source": "/vs/midjourney", "destination": "/alternatives/midjourney", "type": 301 },
+      { "source": "/vs/leonardo", "destination": "/alternatives/leonardo-ai", "type": 301 },
+      { "source": "/vs/leonardo-ai", "destination": "/alternatives/leonardo-ai", "type": 301 },
+      { "source": "/vs/firefly", "destination": "/alternatives/adobe-firefly", "type": 301 },
+      { "source": "/vs/adobe-firefly", "destination": "/alternatives/adobe-firefly", "type": 301 },
+      { "source": "/vs/dalle", "destination": "/alternatives/dall-e-3", "type": 301 },
+      { "source": "/vs/dall-e", "destination": "/alternatives/dall-e-3", "type": 301 },
+      { "source": "/vs/comfyui", "destination": "/alternatives/comfyui", "type": 301 },
+      { "source": "/vs/stable-diffusion", "destination": "/alternatives/stable-diffusion", "type": 301 },
+      { "source": "/midjourney-alternative", "destination": "/alternatives/midjourney", "type": 301 },
+      { "source": "/leonardo-alternative", "destination": "/alternatives/leonardo-ai", "type": 301 },
+      { "source": "/best-ai-image-generator", "destination": "/guides/best-ai-image-generator", "type": 301 },
+      { "source": "/anime-ai-art", "destination": "/use-cases/anime-ai-art", "type": 301 },
+      { "source": "/photorealistic-ai-art", "destination": "/use-cases/photorealistic-ai-art", "type": 301 },
+      { "source": "/ai-art-without-discord", "destination": "/use-cases/ai-art-without-discord", "type": 301 },
+      { "source": "/private-ai-art", "destination": "/use-cases/private-local-ai-art", "type": 301 },
+      { "source": "/local-ai-art", "destination": "/use-cases/private-local-ai-art", "type": 301 },
+      { "source": "/free-ai-image-generator", "destination": "/guides/free-ai-image-generator", "type": 301 },
+      { "source": "/game-concept-art", "destination": "/use-cases/game-concept-art", "type": 301 },
+      { "source": "/vs/ideogram", "destination": "/alternatives/ideogram", "type": 301 },
+      { "source": "/ideogram-alternative", "destination": "/alternatives/ideogram", "type": 301 },
+      { "source": "/stable-diffusion-for-beginners", "destination": "/guides/stable-diffusion-for-beginners", "type": 301 },
+      { "source": "/stable-diffusion-beginners", "destination": "/guides/stable-diffusion-for-beginners", "type": 301 },
+      { "source": "/flux-ai-art", "destination": "/use-cases/flux-ai-art", "type": 301 },
+      { "source": "/flux-ai", "destination": "/use-cases/flux-ai-art", "type": 301 },
+      { "source": "/ai-image-api", "destination": "/use-cases/api-ai-image-generation", "type": 301 },
+      { "source": "/commercial-ai-art", "destination": "/guides/ai-art-commercial-use", "type": 301 },
+      { "source": "/ai-art-prompts", "destination": "/guides/how-to-write-ai-art-prompts", "type": 301 },
+      { "source": "/how-to-write-ai-prompts", "destination": "/guides/how-to-write-ai-art-prompts", "type": 301 },
+      { "source": "/vs/civitai", "destination": "/alternatives/civitai", "type": 301 },
+      { "source": "/vs/bing", "destination": "/alternatives/bing-image-creator", "type": 301 },
+      { "source": "/vs/bing-image-creator", "destination": "/alternatives/bing-image-creator", "type": 301 },
+      { "source": "/bing-image-creator-alternative", "destination": "/alternatives/bing-image-creator", "type": 301 },
+      { "source": "/microsoft-designer-alternative", "destination": "/alternatives/bing-image-creator", "type": 301 },
+      { "source": "/product-photography-ai", "destination": "/use-cases/product-photography-ai", "type": 301 },
+      { "source": "/social-media-ai-art", "destination": "/use-cases/social-media-ai-art", "type": 301 },
+      { "source": "/ai-social-media-art", "destination": "/use-cases/social-media-ai-art", "type": 301 },
+      { "source": "/youtube-thumbnail-ai", "destination": "/use-cases/social-media-ai-art", "type": 301 },
+      { "source": "/vs/canva", "destination": "/alternatives/canva-ai", "type": 301 },
+      { "source": "/vs/canva-ai", "destination": "/alternatives/canva-ai", "type": 301 },
+      { "source": "/canva-ai-alternative", "destination": "/alternatives/canva-ai", "type": 301 },
+      { "source": "/canva-magic-media-alternative", "destination": "/alternatives/canva-ai", "type": 301 },
+      { "source": "/logo-branding-ai", "destination": "/use-cases/logo-branding-ai", "type": 301 },
+      { "source": "/ai-logo-generator", "destination": "/use-cases/logo-branding-ai", "type": 301 },
+      { "source": "/ai-branding-generator", "destination": "/use-cases/logo-branding-ai", "type": 301 },
+      { "source": "/vs/playground", "destination": "/alternatives/playground-ai", "type": 301 },
+      { "source": "/vs/playground-ai", "destination": "/alternatives/playground-ai", "type": 301 },
+      { "source": "/playground-ai-alternative", "destination": "/alternatives/playground-ai", "type": 301 },
+      { "source": "/book-cover-ai", "destination": "/use-cases/book-cover-ai-art", "type": 301 },
+      { "source": "/ai-book-cover-generator", "destination": "/use-cases/book-cover-ai-art", "type": 301 },
+      { "source": "/kdp-book-cover-ai", "destination": "/use-cases/book-cover-ai-art", "type": 301 },
+      { "source": "/vs/nightcafe", "destination": "/alternatives/nightcafe", "type": 301 },
+      { "source": "/nightcafe-alternative", "destination": "/alternatives/nightcafe", "type": 301 },
+      { "source": "/print-on-demand-ai", "destination": "/use-cases/print-on-demand-ai-art", "type": 301 },
+      { "source": "/pod-ai-art", "destination": "/use-cases/print-on-demand-ai-art", "type": 301 },
+      { "source": "/etsy-ai-art", "destination": "/use-cases/print-on-demand-ai-art", "type": 301 },
+      { "source": "/vs/starryai", "destination": "/alternatives/starryai", "type": 301 },
+      { "source": "/starryai-alternative", "destination": "/alternatives/starryai", "type": 301 },
+      { "source": "/starry-ai-alternative", "destination": "/alternatives/starryai", "type": 301 },
+      { "source": "/flux-vs-sdxl", "destination": "/guides/flux-vs-sdxl", "type": 301 },
+      { "source": "/sdxl-vs-flux", "destination": "/guides/flux-vs-sdxl", "type": 301 },
+      { "source": "/vs/getimg", "destination": "/alternatives/getimg-ai", "type": 301 },
+      { "source": "/getimg-alternative", "destination": "/alternatives/getimg-ai", "type": 301 },
+      { "source": "/getimg-ai-alternative", "destination": "/alternatives/getimg-ai", "type": 301 },
+      { "source": "/interior-design-ai", "destination": "/use-cases/interior-design-ai-art", "type": 301 },
+      { "source": "/ai-room-staging", "destination": "/use-cases/interior-design-ai-art", "type": 301 },
+      { "source": "/ai-home-decor", "destination": "/use-cases/interior-design-ai-art", "type": 301 },
+      { "source": "/vs/novelai", "destination": "/alternatives/novelai", "type": 301 },
+      { "source": "/novelai-alternative", "destination": "/alternatives/novelai", "type": 301 },
+      { "source": "/best-anime-ai-generator", "destination": "/guides/best-anime-ai-image-generator", "type": 301 },
+      { "source": "/anime-ai-generator", "destination": "/guides/best-anime-ai-image-generator", "type": 301 },
+      { "source": "/vs/fotor", "destination": "/alternatives/fotor", "type": 301 },
+      { "source": "/fotor-alternative", "destination": "/alternatives/fotor", "type": 301 },
+      { "source": "/vs/deepai", "destination": "/alternatives/deepai", "type": 301 },
+      { "source": "/deepai-alternative", "destination": "/alternatives/deepai", "type": 301 },
+      { "source": "/best-photorealistic-ai-generator", "destination": "/guides/best-photorealistic-ai-image-generator", "type": 301 },
+      { "source": "/photorealistic-ai-generator", "destination": "/guides/best-photorealistic-ai-image-generator", "type": 301 }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          },
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin-allow-popups"
+          },
+          {
+            "key": "Cross-Origin-Embedder-Policy",
+            "value": "unsafe-none"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          }
+        ]
+      },
+      {
+        "source": "/account/**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "source": "/auth/**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "source": "/dashboard/**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "source": "/generator/**",
+        "headers": [
+          {
+            "key": "X-Robots-Tag",
+            "value": "noindex, nofollow"
+          }
+        ]
+      },
+      {
+        "source": "/sw.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/*.@(dmg|exe|AppImage)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/dreambees-lite-[0-9]*.@(dmg|exe|AppImage)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/manifest.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/_next/static/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|webp|svg|ico|woff|woff2)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/!(sw).@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1169 @@
+.generator-simple {
+    min-height: 100vh;
+    width: min(1180px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 20px 0 40px;
+}
+
+.page-head {
+    margin-bottom: 16px;
+}
+
+.page-head h1 {
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    letter-spacing: -0.05em;
+    margin: 0 0 6px;
+}
+
+.page-head p {
+    margin: 0;
+    color: var(--color-zinc-400);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.generator-layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 0.88fr) minmax(340px, 1.12fr);
+    gap: 16px;
+    align-items: start;
+}
+
+.input-column {
+    position: sticky;
+    top: 16px;
+}
+
+.preview-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.simple-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 14px;
+}
+
+.card-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.card-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.card-label-row .card-label {
+    margin-bottom: 0;
+}
+
+.text-link {
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.text-link:hover {
+    color: white;
+}
+
+.input-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.field-label {
+    font-size: 1rem;
+    font-weight: 900;
+    color: white;
+}
+
+.prompt-input {
+    width: 100%;
+    min-height: 110px;
+    resize: vertical;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: left;
+    word-spacing: normal;
+    outline: none;
+}
+
+.prompt-input:focus {
+    border-color: rgba(139, 92, 246, 0.7);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.prompt-input::placeholder {
+    color: var(--color-zinc-500);
+}
+
+.dream-input-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dream-input-wrap {
+    position: relative;
+    min-height: 110px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.dream-input-wrap:focus-within {
+    border-color: rgba(139, 92, 246, 0.7);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.dream-input-wrap[data-loading="true"]::after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(251, 191, 36, 0.75);
+    box-shadow: 0 0 14px rgba(251, 191, 36, 0.7);
+    pointer-events: none;
+}
+
+.dreamtrail-dev-source {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    z-index: 4;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.9);
+    color: rgba(254, 243, 199, 0.95);
+    font-size: 11px;
+    line-height: 1;
+    padding: 5px 6px;
+    pointer-events: none;
+}
+
+.dream-input-textarea {
+    position: relative;
+    z-index: 2;
+    display: block;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    caret-color: white;
+}
+
+.dream-input-textarea:focus {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.dreamtrail-overlay {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    padding: 14px;
+    color: transparent;
+    font-family: inherit;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-transform: none;
+    text-align: left;
+    word-spacing: normal;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.dreamtrail-overlay-prompt {
+    color: transparent;
+}
+
+.dreamtrail-ghost {
+    color: rgba(212, 212, 216, 0.42);
+    font-style: italic;
+    animation: dreamtrailGhostIn 0.16s ease-out;
+    transition: color 0.15s ease;
+}
+
+.dreamtrail-ghost::after {
+    content: "|";
+    font-style: normal;
+    animation: ghostCursorBlink 1s step-end infinite;
+    color: rgba(139, 92, 246, 0.85);
+    margin-left: 1px;
+}
+
+@keyframes ghostCursorBlink {
+    from, to { color: transparent }
+    50% { color: rgba(139, 92, 246, 0.85) }
+}
+
+@keyframes dreamtrailGhostIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.dreamtrail-hint {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.76rem;
+    color: var(--color-zinc-400);
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: 4px;
+    user-select: none;
+}
+
+.dreamtrail-hint-left {
+    display: flex;
+    align-items: center;
+}
+
+.dreamtrail-hint-keys {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dreamtrail-hint-divider {
+    margin: 0 4px;
+    opacity: 0.3;
+}
+
+.dreamtrail-hint-action {
+    font-weight: 500;
+    opacity: 0.85;
+}
+
+.dreamtrail-hint-idle {
+    opacity: 0.6;
+    font-style: italic;
+}
+
+.dreamtrail-keycap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    transition: transform 0.08s, background-color 0.08s, border-color 0.08s, box-shadow 0.08s;
+}
+
+.dreamtrail-keycap.active {
+    background: rgba(139, 92, 246, 0.42);
+    border-color: rgba(139, 92, 246, 0.65);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.75);
+    transform: translateY(1px);
+    box-shadow: 0 0 6px rgba(139, 92, 246, 0.5);
+    color: white;
+}
+
+.dreamtrail-hint-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: transparent;
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: var(--color-zinc-300);
+    cursor: pointer;
+    font-size: 0.74rem;
+    font-weight: 750;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+}
+
+.dreamtrail-hint-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+}
+
+.dreamtrail-hint-btn:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dreamtrail-undo-btn .dreamtrail-keycap {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.2);
+    border-bottom: 2px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+}
+
+.dreamtrail-undo-btn:hover {
+    background: rgba(239, 68, 68, 0.08) !important;
+}
+
+.dreamtrail-undo-btn:hover .dreamtrail-keycap {
+    background: rgba(239, 68, 68, 0.22);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: white;
+}
+
+.dreamtrail-status-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    border-radius: 99px;
+    font-size: 0.70rem;
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dreamtrail-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.dreamtrail-status-low {
+    border-color: rgba(245, 158, 11, 0.25);
+    background: rgba(245, 158, 11, 0.05);
+    color: #f59e0b;
+}
+.dreamtrail-status-low .dreamtrail-status-dot {
+    background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+}
+
+.dreamtrail-status-medium {
+    border-color: rgba(139, 92, 246, 0.25);
+    background: rgba(139, 92, 246, 0.05);
+    color: #a78bfa;
+}
+.dreamtrail-status-medium .dreamtrail-status-dot {
+    background: #a78bfa;
+    box-shadow: 0 0 8px #a78bfa;
+}
+
+.dreamtrail-status-high {
+    border-color: rgba(16, 185, 129, 0.25);
+    background: rgba(16, 185, 129, 0.05);
+    color: #10b981;
+}
+.dreamtrail-status-high .dreamtrail-status-dot {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.dreamtrail-status-loading {
+    border-color: rgba(139, 92, 246, 0.35);
+    background: rgba(139, 92, 246, 0.08);
+    color: #a78bfa;
+}
+.dreamtrail-status-loading .dreamtrail-status-dot {
+    background: #a78bfa;
+    box-shadow: 0 0 8px #a78bfa;
+    animation: statusPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes statusPulse {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+.dreamtrail-pagination {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    padding: 1px 4px;
+}
+
+.dreamtrail-pagination-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 2px;
+    border-radius: 4px;
+    color: var(--color-zinc-400);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.dreamtrail-pagination-arrow:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.dreamtrail-pagination-arrow:active {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.dreamtrail-pagination-text {
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-zinc-400);
+    user-select: none;
+    padding: 0 4px;
+}
+
+.dreamtrail-info-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--color-zinc-400);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.dreamtrail-info-trigger:hover,
+.dreamtrail-info-trigger.active {
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.45);
+    color: white;
+}
+
+.dreamtrail-info-card {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 10px);
+    width: 290px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(15, 15, 20, 0.95);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+    z-index: 100;
+    text-align: left;
+    pointer-events: auto;
+}
+
+.dreamtrail-info-card h4 {
+    margin: 0 0 6px 0;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #a78bfa;
+}
+
+.dreamtrail-info-card p {
+    margin: 0 0 8px 0;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: var(--color-zinc-300);
+    font-weight: 500;
+}
+
+.dreamtrail-info-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.dreamtrail-info-card li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 6px 0;
+    font-size: 0.74rem;
+    color: var(--color-zinc-300);
+}
+
+.dreamtrail-info-card .info-key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+    border-radius: 4px;
+    padding: 0px 4px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: white;
+    min-width: 24px;
+}
+
+.dreamtrail-info-card .info-note {
+    margin: 0;
+    font-size: 0.7rem;
+    font-style: italic;
+    color: var(--color-zinc-500);
+    line-height: 1.3;
+}
+
+
+.dreamtrail-panel-title {
+    width: 100%;
+    font-size: 0.68rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-zinc-500);
+    margin-bottom: 2px;
+}
+
+.dreamtrail-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    animation: dreamtrailPanelIn 0.16s ease-out;
+}
+
+@keyframes dreamtrailPanelIn {
+    from {
+        opacity: 0;
+        transform: translateY(-2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dreamtrail-panel button {
+    min-width: 0;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(251, 191, 36, 0.16);
+    background: rgba(251, 191, 36, 0.06);
+    color: rgba(244, 244, 245, 0.82);
+    font-size: 0.78rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.dreamtrail-panel button:hover {
+    border-color: rgba(251, 191, 36, 0.42);
+    background: rgba(251, 191, 36, 0.1);
+    color: white;
+}
+
+.dreamtrail-panel button.active {
+    border-color: rgba(251, 191, 36, 0.7);
+    background: rgba(251, 191, 36, 0.18);
+    color: white;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.25);
+}
+
+.dreamtrail-editorial-panel button {
+    border-color: rgba(139, 92, 246, 0.24);
+    background: rgba(139, 92, 246, 0.08);
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.dreamtrail-editorial-panel button:hover {
+    border-color: rgba(139, 92, 246, 0.55);
+    background: rgba(139, 92, 246, 0.14);
+}
+
+.dreamtrail-editorial-panel button.active {
+    border-color: rgba(139, 92, 246, 0.75);
+    background: rgba(139, 92, 246, 0.22);
+    color: white;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.dreamtrail-mode-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.14);
+}
+
+.dreamtrail-mode-row button {
+    min-width: 0;
+    min-height: 34px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--color-zinc-500);
+    font-size: 0.72rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.dreamtrail-mode-row button:hover,
+.dreamtrail-mode-row button.active {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.idea-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.idea-pill {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-zinc-300);
+    font-size: 0.8rem;
+    font-weight: 850;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.idea-pill:hover {
+    border-color: rgba(139, 92, 246, 0.45);
+    color: white;
+    background: rgba(139, 92, 246, 0.12);
+}
+
+.ratio-field {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.ratio-legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.ratio-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.ratio-heading span:first-child {
+    color: white;
+    font-size: 1rem;
+    font-weight: 900;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.ratio-heading span:last-child {
+    min-width: 0;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.24);
+    color: #fbbf24;
+    font-size: 0.62rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ratio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.14);
+}
+
+.ratio-grid button {
+    min-width: 0;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 7px;
+    border-radius: 10px;
+    border: 0;
+    background: transparent;
+    color: var(--color-zinc-300);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.ratio-grid button:hover,
+.ratio-grid button.active {
+    background: rgba(251, 191, 36, 0.1);
+    color: white;
+}
+
+.ratio-grid button.active {
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.14);
+}
+
+.ratio-mini {
+    width: 15px;
+    max-height: 20px;
+    min-height: 9px;
+    flex: 0 0 auto;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+    background: rgba(251, 191, 36, 0.12);
+    opacity: 0.78;
+}
+
+.ratio-grid button.active .ratio-mini,
+.ratio-grid button:hover .ratio-mini {
+    background: rgba(251, 191, 36, 0.24);
+    opacity: 1;
+}
+
+.ratio-copy {
+    min-width: 0;
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1;
+}
+
+.ratio-copy span {
+    font-size: 0.74rem;
+    font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ratio-copy small {
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--color-zinc-500);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.style-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.15);
+    color: white;
+    text-decoration: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.style-row:hover {
+    border-color: rgba(139, 92, 246, 0.45);
+    background: rgba(139, 92, 246, 0.08);
+}
+
+.style-row svg {
+    color: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.style-row-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-zinc-500);
+}
+
+.style-row-value {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 900;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.style-row-chevron {
+    color: var(--color-zinc-500);
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.create-zone {
+    padding-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 2px;
+}
+
+.btn-create {
+    width: 100%;
+    min-height: 58px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-dream-purple));
+    color: white;
+    font-size: 1.15rem;
+    font-weight: 950;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(139, 92, 246, 0.3);
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    will-change: transform, box-shadow;
+}
+
+.btn-create:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 32px rgba(139, 92, 246, 0.38);
+}
+
+.btn-create:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.credits-line {
+    margin: 12px 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--color-zinc-300);
+}
+
+.block-line {
+    margin: 6px 0 0;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 750;
+    color: #fbbf24;
+}
+
+.wait-line {
+    margin: 10px 0 6px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-zinc-500);
+    line-height: 1.35;
+}
+
+.elapsed-hint, .elapsed-line {
+    font-weight: 650;
+    color: var(--color-zinc-600);
+}
+
+.elapsed-line {
+    margin: 0;
+    font-size: 0.75rem;
+}
+
+.progress-track {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-dream-purple));
+    transition: width 0.45s ease;
+}
+
+.stage-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.stage-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.stage-dot.active {
+    background: var(--color-accent);
+    transform: scale(1.15);
+}
+
+.preview-stage {
+    min-height: 340px;
+    max-height: min(72vh, 680px);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.preview-loading {
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    position: relative;
+}
+
+.preview-blur, .preview-sharp {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    animation: previewReveal 0.5s ease;
+}
+
+.preview-blur {
+    filter: blur(8px) brightness(0.85);
+    transform: scale(1.04);
+}
+
+.preview-sharp {
+    filter: none;
+    transform: none;
+}
+
+.preview-skeleton {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient( 110deg, rgba(255, 255, 255, 0.04) 25%, rgba(139, 92, 246, 0.12) 50%, rgba(255, 255, 255, 0.04) 75% );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes previewReveal {
+    from {
+        opacity: 0;
+        transform: scale(1.08);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+}
+
+.preview-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--color-accent);
+    font-weight: 900;
+}
+
+.preview-progress {
+    width: min(240px, 80%);
+    margin-top: 4px;
+}
+
+.preview-prompt {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-zinc-400);
+    line-height: 1.4;
+    max-width: 280px;
+}
+
+.dismiss-pending-btn {
+    margin-top: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--color-zinc-300);
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.dismiss-pending-btn:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    color: white;
+}
+
+.latest-figure {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.latest-figure img {
+    width: 100%;
+    min-height: 0;
+    object-fit: contain;
+    display: block;
+    flex: 1;
+}
+
+.latest-figure figcaption {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-zinc-300);
+    background: rgba(0, 0, 0, 0.35);
+    line-height: 1.35;
+}
+
+.latest-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 24px;
+    color: var(--color-zinc-500);
+    font-weight: 800;
+}
+
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    content-visibility: auto;
+    contain-intrinsic-size: 150px;
+}
+
+.history-thumb {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    aspect-ratio: 1;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, border-color, box-shadow;
+}
+
+.history-thumb:hover {
+    transform: translateY(-2px) scale(1.03);
+    border-color: rgba(139, 92, 246, 0.45);
+    box-shadow: 0 8px 16px rgba(139, 92, 246, 0.15);
+}
+
+.history-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.history-empty {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-zinc-500);
+    font-weight: 750;
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 900px) {
+    .generator-layout {
+        grid-template-columns: 1fr;
+    }
+    .input-column {
+        position: static;
+    }
+}
+
+@media (max-width: 620px) {
+    .dreamtrail-mode-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ratio-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .idea-pill {
+        flex: 1 1 calc(33% - 6px);
+    }
+    .history-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

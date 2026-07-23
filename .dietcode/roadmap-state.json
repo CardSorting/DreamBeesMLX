@@ -1,0 +1,15 @@
+{
+  "validation_pending": false,
+  "schema_valid": true,
+  "last_mutated_at": "2026-06-14T06:11:05.067Z",
+  "last_mutation_tool": "external",
+  "last_mutation_path": "ROADMAP.md",
+  "updated_at": "2026-06-14T06:12:05.776Z",
+  "last_validated_at": "2026-06-14T06:12:05.774Z",
+  "health_status": "Coherent",
+  "recent_checkpoint_date": "2026-06-14",
+  "phase": "checkpoint",
+  "validation_issue_count": 0,
+  "bootstrap_placeholder_count": 0,
+  "bootstrap_complete": true
+}

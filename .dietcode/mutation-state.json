@@ -1,0 +1,16 @@
+{
+  "workspaceRevision": 1,
+  "verifyRevision": 0,
+  "contextRefreshId": 1,
+  "trackedFileHashes": {
+    "README.md": "2ff2717a9459ee3c3561d1e1bf1f1b8f874b135b93488cce0e0e6c4795249782",
+    "src/AppContent.tsx": "6f1c34e355a41c4dfaf6b1b1837e5cf078b2d176a97ec7fa4eb715640eaa17ac",
+    "src/pages/Generator.tsx": "71076af18d4d1da4872b05b83996990c2af92d91ce9248c1b92f05109d16a357",
+    "src/pages/ModelFeed.tsx": "ee1f7913bae64ab8f1e3f9e7dd342b68be970351821b3eab8cefe60b1f4ae575",
+    "src/contexts/LiteContext.tsx": "1b330ac04b4c452a3ede6651d49328d25bb5f8819ea3934bb6a7cb0a2e82f9ab",
+    "ROADMAP.md": "c7ffb14fd6d665603864f4aa7bbfe1980577e0d8d2201541e185e61072d9121d",
+    ".wiki/index.md": "7b5c9b8d9bbf629000f61baf89a106c12141842e83606a3a8effff4837cc1f15",
+    ".wiki/changelog.md": "f45f4ab5676552eafe03d525481dbdfa47108dd42aa36a89eddb632a82ed20d5"
+  },
+  "coherenceTokens": {}
+}

@@ -1,0 +1,9 @@
+#!/bin/sh
+# Validates marketing SEO routes stay in sync when seo.ts, content libs, or infra change.
+set -e
+changed=$(git diff --cached --name-only)
+case "$changed" in
+  *web/src/lib/seo.ts*|*web/src/lib/alternatives.ts*|*web/src/lib/guides.ts*|*web/src/lib/use-cases.ts*|*web/scripts/marketing-routes.mjs*|*functions/src/handlers/web/sitemapHandler.ts*|*functions/src/lib/seo.ts*)
+    npm run seo:verify-routes
+    ;;
+esac

@@ -1,0 +1,79 @@
+{
+  "subscriptions": {
+    "pro": {
+      "productId": "prod_alchemist_pro",
+      "priceId": "price_1TeOk1IA2zQnWbn5V7GsiAB6",
+      "amount": 2900
+    },
+    "architect": {
+      "productId": "prod_architect_pro",
+      "priceId": "price_1TeOk1IA2zQnWbn5YbTvD7Oj",
+      "amount": 9900
+    }
+  },
+  "payments": {
+    "50": {
+      "productId": "prod_zaps_50",
+      "priceId": "price_1TeOk2IA2zQnWbn5v0I8HQYB",
+      "amount": 499
+    },
+    "120": {
+      "productId": "prod_zaps_120",
+      "priceId": "price_1TeOk3IA2zQnWbn5u8JeE7Z0",
+      "amount": 999
+    },
+    "300": {
+      "productId": "prod_zaps_300",
+      "priceId": "price_1TeOk3IA2zQnWbn569bphdyX",
+      "amount": 1999
+    },
+    "900": {
+      "productId": "prod_zaps_900",
+      "priceId": "price_1TeOk4IA2zQnWbn5FpxaymDB",
+      "amount": 4999
+    }
+  },
+  "products": {
+    "taste_test": {
+      "productId": "prod_zaps_taste",
+      "priceId": "price_1TePpZIA2zQnWbn5YiEaXajs",
+      "amount": 199,
+      "zaps": 15,
+      "recurring": null
+    },
+    "mystic_bulk": {
+      "productId": "prod_zaps_mystic",
+      "priceId": "price_1TePpZIA2zQnWbn51HGTpUj6",
+      "amount": 9999,
+      "zaps": 2500,
+      "recurring": null
+    },
+    "alchemist_quarterly": {
+      "productId": "prod_alchemist_quarterly",
+      "priceId": "price_1TePpaIA2zQnWbn54zkMkNjH",
+      "amount": 7500,
+      "zaps": null,
+      "recurring": {
+        "interval": "month",
+        "interval_count": 3
+      }
+    }
+  },
+  "coupons": {
+    "retention_30_off_3mo": {
+      "id": "retention_30_off_3mo",
+      "name": "Retention - 30% off 3 months",
+      "percent_off": 30,
+      "duration": "repeating",
+      "duration_in_months": 3
+    },
+    "retention_50_off_1mo": {
+      "id": "retention_50_off_1mo",
+      "name": "Retention - 50% off 1 month",
+      "percent_off": 50,
+      "duration": "once",
+      "duration_in_months": null
+    }
+  },
+  "_lastUpdated": "2026-06-04T01:21:45.760Z"
+}

@@ -1,0 +1,58 @@
+<svg width="660" height="420" viewBox="0 0 660 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="660" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#101114"/>
+      <stop offset="0.48" stop-color="#16121c"/>
+      <stop offset="1" stop-color="#0b1517"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="40" y1="76" x2="620" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#23242a" stop-opacity="0.86"/>
+      <stop offset="1" stop-color="#111417" stop-opacity="0.82"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.38"/>
+    </filter>
+  </defs>
+
+  <rect width="660" height="420" fill="url(#bg)"/>
+  <path d="M0 0H660V420H0V0Z" fill="#0B0B0E" opacity="0.18"/>
+
+  <g opacity="0.22">
+    <path d="M0 86H660M0 154H660M0 222H660M0 290H660M0 358H660" stroke="#FFFFFF" stroke-opacity="0.11"/>
+    <path d="M78 0V420M178 0V420M278 0V420M378 0V420M478 0V420M578 0V420" stroke="#FFFFFF" stroke-opacity="0.08"/>
+  </g>
+
+  <path d="M44 78C44 67.5066 52.5066 59 63 59H597C607.493 59 616 67.5066 616 78V350C616 360.493 607.493 369 597 369H63C52.5066 369 44 360.493 44 350V78Z" fill="url(#panel)" stroke="#FFFFFF" stroke-opacity="0.08" filter="url(#softShadow)"/>
+
+  <path d="M68 59H592C605.255 59 616 69.7452 616 83V129H44V83C44 69.7452 54.7452 59 68 59Z" fill="#171A20" fill-opacity="0.94"/>
+  <path d="M44 129H616" stroke="#FFFFFF" stroke-opacity="0.08"/>
+
+  <g transform="translate(71 88)">
+    <path d="M17.5 4.5L31 12.5V28.5L17.5 36.5L4 28.5V12.5L17.5 4.5Z" fill="#0F1115" stroke="#6EE7F9" stroke-width="2"/>
+    <path d="M11 19.5C11 14.8 13.9 11.5 17.5 11.5C21.1 11.5 24 14.8 24 19.5C24 24.2 21.1 27.5 17.5 27.5C13.9 27.5 11 24.2 11 19.5Z" fill="#F8FAFC"/>
+    <path d="M9.5 17.5C4.8 12.2 2.5 8.2 4 6.5C6.7 4.8 15.3 10.7 17.5 16.5C19.7 10.7 28.3 4.8 31 6.5C32.5 8.2 30.2 12.2 25.5 17.5" stroke="#A78BFA" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M13 20.4H22" stroke="#0F1115" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M14 25H21" stroke="#0F1115" stroke-width="2.8" stroke-linecap="round"/>
+  </g>
+
+  <text x="122" y="102" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="25" font-weight="700" letter-spacing="0">DreamBees Lite</text>
+  <text x="122" y="123" fill="#A7B0BD" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="500" letter-spacing="0">Drag the app into Applications to install.</text>
+
+  <g>
+    <rect x="91" y="176" width="128" height="116" rx="18" fill="#0E1116" fill-opacity="0.43" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    <rect x="441" y="176" width="128" height="116" rx="18" fill="#0E1116" fill-opacity="0.43" stroke="#FFFFFF" stroke-opacity="0.08"/>
+  </g>
+
+  <g opacity="0.95">
+    <rect x="260" y="203" width="130" height="7" rx="3.5" fill="#020617" fill-opacity="0.65"/>
+    <rect x="262" y="202" width="126" height="6" rx="3" fill="#5EEAD4"/>
+    <rect x="324" y="202" width="46" height="6" rx="3" fill="#F5C542"/>
+    <path d="M377 188L397 205L377 222V211L386 205L377 199V188Z" fill="#5EEAD4"/>
+  </g>
+
+  <path d="M92 335H568" stroke="#FFFFFF" stroke-opacity="0.08"/>
+  <text x="330" y="347" text-anchor="middle" fill="#9AA5B1" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="500" letter-spacing="0">After copying, open DreamBees Lite from Applications.</text>
+
+  <path d="M581 83C587.627 83 593 88.3726 593 95C593 101.627 587.627 107 581 107C574.373 107 569 101.627 569 95C569 88.3726 574.373 83 581 83Z" fill="#F5C542" fill-opacity="0.88"/>
+  <path d="M542 93C542 89.6863 544.686 87 548 87H557C560.314 87 563 89.6863 563 93V97C563 100.314 560.314 103 557 103H548C544.686 103 542 100.314 542 97V93Z" fill="#5EEAD4" fill-opacity="0.78"/>
+</svg>

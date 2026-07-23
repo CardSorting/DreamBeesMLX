@@ -1,0 +1,47 @@
+{
+    "name": "functions",
+    "description": "Cloud Functions for Firebase",
+    "main": "lib/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "build:watch": "tsc --watch",
+        "serve": "npm run build && firebase emulators:start --only functions",
+        "shell": "npm run build && firebase functions:shell",
+        "start": "npm run shell",
+        "deploy": "npm run build && firebase deploy --only functions",
+        "logs": "firebase functions:log",
+        "lint": "eslint .",
+        "predeploy": "npm run build"
+    },
+    "dependencies": {
+        "@anthropic-ai/sdk": "^0.78.0",
+        "@aws-sdk/client-s3": "^3.400.0",
+        "@google-cloud/vertexai": "^1.10.0",
+        "@google/genai": "^1.35.0",
+        "@google/generative-ai": "^0.24.1",
+        "@openrouter/sdk": "^0.3.12",
+        "cors": "^2.8.5",
+        "dotenv": "^17.2.3",
+        "firebase-admin": "^12.0.0",
+        "firebase-functions": "^7.0.6",
+        "js-tiktoken": "^1.0.21",
+        "noormme": "^1.1.0",
+        "pusher": "^5.3.2",
+        "replicate": "^1.4.0",
+        "sharp": "^0.33.0",
+        "stripe": "^20.1.0",
+        "zod": "^3.22.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "eslint": "^9.39.2",
+        "typescript": "^5.0.0"
+    },
+    "private": true,
+    "imports": {
+        "#substrate/client": "./lib/generation/substrate-client.js",
+        "#generation/contract": "./lib/generation/contract.js",
+        "#generation/repository": "./lib/generation/queue-repository.js"
+    }
+}

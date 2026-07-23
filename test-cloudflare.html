@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+</head>
+<body>
+<video id="video" controls autoplay muted style="width: 100%; max-width: 500px;"></video>
+<script>
+  var video = document.getElementById('video');
+  var videoSrc = 'https://videodelivery.net/138429ada97be20b8717d73830c1ca38/manifest/video.m3u8';
+  if (Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource(videoSrc);
+    hls.attachMedia(video);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+{
+  "rules": {
+    "messages": {
+      "$channel": {
+        ".read": "auth != null && (!$channel.beginsWith('private-') || $channel.contains(auth.uid))",
+        ".write": "auth != null"
+      }
+    },
+    "chats": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".indexOn": ["createdAt", "updatedAt"],
+        "$chatId": {
+          ".validate": "newData.hasChildren(['id', 'createdAt'])",
+          "messages": {
+            "$messageId": {
+              ".read": "auth != null && auth.uid === $uid",
+              ".write": "auth != null && auth.uid === $uid && !data.exists()",
+              ".validate": "newData.hasChildren(['role', 'content', 'timestamp'])",
+              ".indexOn": ["timestamp"]
+            }
+          }
+        }
+      }
+    },
+    "memory": {
+      "nodes": {
+        "$repoPath": {
+          ".read": "auth != null && $repoPath === 'user-' + auth.uid",
+          "$nodeId": {
+             ".write": "auth != null && $repoPath === 'user-' + auth.uid && !data.exists()",
+             ".validate": "newData.hasChildren(['content', 'vector', 'timestamp'])",
+             ".indexOn": ["timestamp", "author"]
+          }
+        }
+      },
+      "branches": {
+        "$repoPath": {
+          ".read": "auth != null && $repoPath === 'user-' + auth.uid",
+          ".write": "auth != null && $repoPath === 'user-' + auth.uid"
+        }
+      },
+      "tags": {
+        "$repoPath": {
+          ".read": "auth != null && $repoPath === 'user-' + auth.uid",
+          ".write": "auth != null && $repoPath === 'user-' + auth.uid"
+        }
+      },
+      "reflog": {
+        "$repoPath": {
+          ".read": "auth != null && $repoPath === 'user-' + auth.uid",
+          "$commitHash": {
+             ".write": "auth != null && $repoPath === 'user-' + auth.uid && !data.exists()",
+             ".indexOn": ["timestamp"]
+          }
+        }
+      },
+      "trees": {
+        "$repoPath": {
+          ".read": "auth != null && $repoPath === 'user-' + auth.uid",
+          "$treeHash": {
+             ".write": "auth != null && $repoPath === 'user-' + auth.uid && !data.exists()"
+          }
+        }
+      },
+      "files": {
+        ".read": "auth != null",
+        "$hash": {
+          ".write": "auth != null && !data.exists()"
+        }
+      }
+    },
+    "presence": {
+      "$channel": {
+        ".read": "auth != null",
+        "$uid": {
+          ".write": "$uid === auth.uid"
+        }
+      }
+    },
+    "agent_wallets": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "agent_ledger": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$txid": {
+          ".write": "auth != null && !data.exists() && newData.child('userId').val() === $uid"
+        }
+      }
+    },
+    "agent_performance": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "agent_staking_history": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "swarm_votes": {
+      ".read": "auth != null",
+      "$voteId": {
+        ".write": "auth != null && (!data.exists() || data.child('userId').val() === auth.uid)"
+      }
+    },
+    "agent_logs": {
+      ".read": "auth != null",
+      "$logId": {
+        ".write": "auth != null"
+      }
+    },
+    "agent_state": {
+      ".read": "auth != null",
+      "$agentId": {
+        ".write": "auth != null"
+      }
+    }
+  }
+}

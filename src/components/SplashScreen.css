@@ -1,0 +1,235 @@
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    background: #060608;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 0.24s ease, transform 0.24s ease, filter 0.24s ease;
+}
+
+.splash-screen.splash-exit {
+    opacity: 0;
+    transform: scale(1.025);
+    filter: blur(14px);
+    pointer-events: none;
+}
+
+.mesh-gradient-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.mesh-ball {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    animation: splash-float 30s infinite alternate ease-in-out;
+    will-change: transform;
+}
+
+.mesh-1 {
+    width: 1200px;
+    height: 1200px;
+    background: rgba(139, 92, 246, 0.45);
+    top: -400px;
+    right: -300px;
+}
+
+.mesh-2 {
+    width: 900px;
+    height: 900px;
+    background: rgba(217, 70, 239, 0.3);
+    bottom: -300px;
+    left: -300px;
+    animation-delay: -7s;
+}
+
+.mesh-3 {
+    width: 600px;
+    height: 600px;
+    background: rgba(245, 158, 11, 0.2);
+    top: 10%;
+    left: 20%;
+    animation-duration: 35s;
+}
+
+.mesh-4 {
+    width: 800px;
+    height: 800px;
+    background: rgba(168, 85, 247, 0.15);
+    bottom: 10%;
+    right: 10%;
+    animation-delay: -12s;
+}
+
+@keyframes splash-float {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+    }
+    100% {
+        transform: translate3d(150px, 150px, 0) scale(1.4) rotate(20deg);
+    }
+}
+
+.splash-content {
+    text-align: center;
+    z-index: 10;
+    position: relative;
+}
+
+.splash-logo-container {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.splash-logo {
+    position: relative;
+    filter: drop-shadow(0 0 50px rgba(139, 92, 246, 0.7));
+    animation: splash-logo-pulse 4.5s ease-in-out infinite;
+}
+
+.logo-sparkle {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    color: var(--color-soft-gold);
+    filter: drop-shadow(0 0 15px var(--color-soft-gold));
+    animation: splash-sparkle 2.1s ease-in-out infinite;
+}
+
+.splash-content {
+    animation: splash-content-in 0.38s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.splash-content h1 {
+    font-size: 4.5rem;
+    letter-spacing: -0.06em;
+}
+
+.splash-content h1 span {
+    color: var(--color-white);
+    opacity: 0.5;
+    font-size: 0.4em;
+    vertical-align: middle;
+    margin-left: 10px;
+    letter-spacing: 4px;
+}
+
+.splash-sub {
+    color: #a1a1aa;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-top: 20px;
+}
+
+.loading-track {
+    width: 300px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    margin: 60px auto 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.loading-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-dream-purple), var(--color-accent));
+    background-size: 200% 100%;
+    animation: splash-progress 0.65s ease-out both, shimmer 2s infinite linear;
+    box-shadow: 0 0 20px var(--color-accent);
+}
+
+.skip-hint {
+    font-size: 0.65rem;
+    color: #a1a1aa;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 16px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.skip-hint:hover {
+    opacity: 0.8 !important;
+    color: var(--color-accent);
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes splash-content-in {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes splash-logo-pulse {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    35% {
+        transform: rotate(6deg) scale(1.05);
+    }
+    70% {
+        transform: rotate(-6deg) scale(0.98);
+    }
+}
+
+@keyframes splash-sparkle {
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.7);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+@keyframes splash-progress {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .splash-screen,
+    .splash-content,
+    .splash-logo,
+    .logo-sparkle,
+    .mesh-ball,
+    .loading-fill {
+        animation: none;
+        transition: none;
+    }
+}

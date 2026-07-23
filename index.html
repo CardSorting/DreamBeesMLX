@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <link rel="preconnect" href="https://cdn.dreambeesai.com" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.dreambeesai.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com">
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+  <link rel="preload" as="image" href="/models/nova-furry-xl.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="/models/scyrax-pastel.jpg" fetchpriority="high" />
+  <link rel="prefetch" as="image" href="/models/wai-illustrious.jpg" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <link rel="icon" type="image/png" href="/dreambees_icon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/dreambees_icon.png" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />  <!-- SEO_INJECT_START -->
+  <title>DreamBees Lite | Unlimited Desktop AI Art Generation</title>
+  <meta name="description"
+    content="Experience the power of Stable Diffusion on your desktop. Unlimited generations, blazing fast speeds, and complete creative control. Download DreamBees Lite for macOS and Windows today." />
+  <meta name="keywords"
+    content="AI image generator, desktop ai app, stable diffusion desktop, unlimited ai art, flux ai, dreambees lite, ai art software" />
+  <!-- SEO_INJECT_END -->
+
+  <!-- Open Graph Image Dimensions -->
+  <meta property="og:site_name" content="DreamBees" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Social Media Handles (Placeholders) -->
+  <meta name="twitter:site" content="@dreambeesai" />
+  <meta name="twitter:creator" content="@dreambeesai" />
+  <meta property="fb:app_id" content="REPLACE_ME" />
+
+  <!-- Additional SEO -->
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="DreamBeesAI" />
+  <link rel="canonical" href="https://dreambeesai.com/" />
+  <style>
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #060608;
+      color: #fff;
+    }
+    .boot-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      background: #060608;
+      overflow: hidden;
+    }
+    .boot-side {
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.025);
+    }
+    .boot-main {
+      padding: 24px;
+    }
+    .boot-line,
+    .boot-card {
+      background: linear-gradient(110deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035), rgba(255,255,255,0.08));
+      background-size: 220% 100%;
+      animation: boot-shimmer 1.1s linear infinite;
+    }
+    .boot-line {
+      width: min(520px, 80%);
+      height: 52px;
+      border-radius: 18px;
+      margin: 36px 0 20px;
+    }
+    .boot-kicker {
+      width: 220px;
+      height: 18px;
+      border-radius: 999px;
+    }
+    .boot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .boot-card {
+      aspect-ratio: 4 / 3;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+    }
+    @keyframes boot-shimmer {
+      to { background-position: -220% 0; }
+    }
+    @media (max-width: 760px) {
+      .boot-shell { grid-template-columns: 1fr; }
+      .boot-side { display: none; }
+      .boot-main { padding: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .boot-line, .boot-card { animation: none; }
+    }
+  </style>
+  <script>
+    (function () {
+      var loadFonts = function () {
+        if (document.querySelector('link[data-dreambees-fonts]')) return;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
+        link.dataset.dreambeesFonts = 'true';
+        document.head.appendChild(link);
+      };
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function gtag() { dataLayer.push(arguments); };
+
+      var loadAnalytics = function () {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2MB0XFEC9G';
+        document.head.appendChild(script);
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-2MB0XFEC9G');
+      };
+
+      var schedule = function () {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadFonts, { timeout: 1800 });
+          window.requestIdleCallback(loadAnalytics, { timeout: 2500 });
+        } else {
+          window.setTimeout(loadFonts, 900);
+          window.setTimeout(loadAnalytics, 1500);
+        }
+      };
+
+      if (document.readyState === 'complete') {
+        schedule();
+      } else {
+        window.addEventListener('load', schedule, { once: true });
+      }
+    })();
+  </script>
+
+  <script>
+    (function() {
+      try {
+        var accent = localStorage.getItem('v8-accent-color') || 'purple';
+        var colorMap = { amber: '#fbbf24', pink: '#ec4899', cyan: '#2dd4bf', purple: '#8b5cf6' };
+        var hex = colorMap[accent] || accent;
+        if (hex) {
+          document.documentElement.style.setProperty('--v8-accent', hex);
+          var r = 139, g = 92, b = 246;
+          if (hex.startsWith('#')) {
+            var h = hex.slice(1);
+            if (h.length === 3) {
+              r = parseInt(h[0] + h[0], 16);
+              g = parseInt(h[1] + h[1], 16);
+              b = parseInt(h[2] + h[2], 16);
+            } else if (h.length === 6) {
+              r = parseInt(h.slice(0, 2), 16);
+              g = parseInt(h.slice(2, 4), 16);
+              b = parseInt(h.slice(4, 6), 16);
+            }
+          }
+          document.documentElement.style.setProperty('--v8-accent-rgb', r + ', ' + g + ', ' + b);
+        }
+      } catch (e) {}
+    })();
+  </script>
+</head>
+
+
+<body>
+  <div id="root">
+    <div class="boot-shell" aria-hidden="true">
+      <aside class="boot-side"></aside>
+      <main class="boot-main">
+        <div class="boot-kicker boot-line"></div>
+        <div class="boot-line"></div>
+        <div class="boot-grid">
+          <div class="boot-card"></div>
+          <div class="boot-card"></div>
+          <div class="boot-card"></div>
+          <div class="boot-card"></div>
+          <div class="boot-card"></div>
+          <div class="boot-card"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

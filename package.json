@@ -1,0 +1,159 @@
+{
+  "name": "dreambees-lite",
+  "private": true,
+  "description": "DreamBees Lite desktop app",
+  "author": "DreamBeesAI",
+  "version": "1.4.20",
+  "type": "module",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "prepare:electron-downloads": "node scripts/prepare-electron-downloads.cjs",
+    "preflight:mac-release": "node scripts/check-macos-release-signing.cjs",
+    "build:release:mac": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac",
+    "build:release:mac:notarized": "npm run preflight:mac-release && vite build && electron-builder -c.mac.notarize=true",
+    "dev:electron": "vite",
+    "build:electron": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder",
+    "build:electron:win": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win",
+    "build:electron:linux": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --linux",
+    "build:electron:all": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --win --linux",
+    "build:electron:notarized": "npm run preflight:mac-release && vite build && electron-builder -c.mac.notarize=true",
+    "verify:electron": "npm exec tsc -- --noEmit --pretty false && vite build && electron-builder --dir && node scripts/verify-electron-build.cjs",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.9.0",
+    "dotenv": "^17.2.3",
+    "firebase": "^11.4.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.471.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^7.11.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/vite": "^4.1.18",
+    "@testing-library/react": "^16.3.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.2.3",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/parser": "^8.57.2",
+    "@vitejs/plugin-react": "^5.1.1",
+    "electron": "^41.7.1",
+    "electron-builder": "^26.8.1",
+    "eslint": "^9.39.1",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vite-plugin-electron": "^0.29.1",
+    "vite-plugin-electron-renderer": "^0.14.6",
+    "vitest": "^3.2.4"
+  },
+  "build": {
+    "appId": "com.dreambees.lite",
+    "productName": "DreamBees Lite",
+    "artifactName": "DreamBees-Lite-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist",
+      "dist-electron"
+    ],
+    "asarUnpack": [
+      "**/*.node",
+      "node_modules/better-sqlite3/build/Release/*.node"
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "electron/entitlements.mac.plist",
+      "entitlementsInherit": "electron/entitlements.mac.inherit.plist",
+      "notarize": false,
+      "extendInfo": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false,
+          "NSAllowsLocalNetworking": true,
+          "NSExceptionDomains": {
+            "localhost": {
+              "NSExceptionAllowsInsecureHTTPLoads": true
+            },
+            "127.0.0.1": {
+              "NSExceptionAllowsInsecureHTTPLoads": true
+            }
+          }
+        }
+      }
+    },
+    "dmg": {
+      "background": "electron/assets/dmg-background.png",
+      "iconSize": 96,
+      "iconTextSize": 13,
+      "window": {
+        "width": 660,
+        "height": 420
+      },
+      "contents": [
+        {
+          "x": 505,
+          "y": 230,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 155,
+          "y": 230,
+          "type": "file"
+        }
+      ],
+      "title": "Install DreamBees Lite"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DreamBees Lite"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Utility",
+      "icon": "build/icon.png"
+    },
+    "protocols": {
+      "name": "DreamBees Lite",
+      "schemes": [
+        "dreambees"
+      ]
+    }
+  }
+}
