@@ -89,6 +89,9 @@ function logStartup(message: string, error?: unknown) {
   
   console.log(logEntry.trim());
   
+  if (logQueue.length > 500) {
+    logQueue.shift(); // Evict oldest log entry to prevent log queue memory accumulation
+  }
   logQueue.push(logEntry);
   flushLogQueue();
 }
@@ -129,6 +132,52 @@ function ensureDb() {
 
 let sidecarSupervisor: SidecarSupervisor | null = null;
 let modelDownloader: ModelDownloader | null = null;
+const pendingGenerationPrompts = new Map<string, { prompt: string; modelId: string }>();
+
+async function ensureSidecarSupervisor(): Promise<SidecarSupervisor> {
+  if (!sidecarSupervisor) {
+    const envRes = await touchlessResolver.resolveEnvironment();
+    if (envRes.pythonPath) {
+      process.env.PYTHON_PATH = envRes.pythonPath;
+    }
+
+    const scriptPath = path.join(__dirname, 'mlx/mlx_image_daemon.py');
+    sidecarSupervisor = new SidecarSupervisor(scriptPath);
+
+    // Bind event listeners ONCE to prevent listener leaks
+    sidecarSupervisor.on('message', (msg: any) => {
+      if (!mainWindow) return;
+
+      if (msg.type === 'progress') {
+        mainWindow.webContents.send('mlx:progress', msg.payload);
+      } else if (msg.type === 'complete') {
+        mainWindow.webContents.send('mlx:complete', msg.payload);
+
+        // Save generation record to SQLite
+        if (msg.payload?.output_path && db) {
+          const meta = pendingGenerationPrompts.get(msg.payload.id || '') || { prompt: '', modelId: 'flux2-klein-4b' };
+          db.saveGeneration({
+            id: msg.payload.id || `gen_${Date.now()}`,
+            prompt: meta.prompt,
+            imageUrl: `file://${msg.payload.output_path}`,
+            modelId: msg.payload.model_id || meta.modelId,
+            params: {
+              width: msg.payload.width,
+              height: msg.payload.height,
+              seed: msg.payload.seed,
+              durationMs: msg.payload.duration_ms,
+            },
+            createdAt: Date.now(),
+          });
+          if (msg.payload.id) pendingGenerationPrompts.delete(msg.payload.id);
+        }
+      }
+    });
+
+    sidecarSupervisor.start();
+  }
+  return sidecarSupervisor;
+}
 
 function registerIpcHandlers() {
   // Health check with system diagnostics
@@ -179,6 +228,40 @@ function registerIpcHandlers() {
     }
   });
 
+  ipcMain.handle('lite:optimizeDb', async () => {
+    try {
+      ensureDb().optimizeDatabase();
+      return { ok: true };
+    } catch (error) {
+      logStartup('Failed to optimize database', error);
+      throw error;
+    }
+  });
+
+  ipcMain.handle('lite:getStorageStats', async () => {
+    try {
+      return ensureDb().getStorageStats();
+    } catch (error) {
+      logStartup('Failed to get storage stats', error);
+      return {
+        dbSizeBytes: 0,
+        imageCacheSizeBytes: 0,
+        totalSizeBytes: 0,
+        maxQuotaBytes: 2 * 1024 * 1024 * 1024,
+        itemCount: 0,
+      };
+    }
+  });
+
+  ipcMain.handle('lite:purgeCache', async () => {
+    try {
+      return ensureDb().purgeCache();
+    } catch (error) {
+      logStartup('Failed to purge cache', error);
+      throw error;
+    }
+  });
+
   // MLX Native IPC Handlers
   ipcMain.handle('mlx:getHardwareStats', async () => {
     const os = await import('os');
@@ -205,49 +288,23 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle('mlx:generateImage', async (_, params: any) => {
-    if (!sidecarSupervisor) {
-      const envRes = await touchlessResolver.resolveEnvironment();
-      if (envRes.pythonPath) {
-        process.env.PYTHON_PATH = envRes.pythonPath;
-      }
-
-      const scriptPath = path.join(__dirname, 'mlx/mlx_image_daemon.py');
-      sidecarSupervisor = new SidecarSupervisor(scriptPath);
-
-      sidecarSupervisor.on('message', (msg: any) => {
-        if (mainWindow) {
-          if (msg.type === 'progress') {
-            mainWindow.webContents.send('mlx:progress', msg.payload);
-          } else if (msg.type === 'complete') {
-            mainWindow.webContents.send('mlx:complete', msg.payload);
-            // Save generation record to SQLite
-            if (msg.payload?.output_path && db) {
-              db.saveGeneration({
-                id: `gen_${Date.now()}`,
-                prompt: params.prompt || '',
-                imageUrl: `file://${msg.payload.output_path}`,
-                modelId: msg.payload.model_id || params.modelId,
-                params: {
-                  width: msg.payload.width,
-                  height: msg.payload.height,
-                  seed: msg.payload.seed,
-                  durationMs: msg.payload.duration_ms,
-                },
-                createdAt: Date.now(),
-              });
-            }
-          }
-        }
-      });
-
-      sidecarSupervisor.start();
-    }
+    const supervisor = await ensureSidecarSupervisor();
 
     const outputDir = path.join(app.getPath('userData'), 'generations');
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
     const outputPath = path.join(outputDir, `gen_${Date.now()}_${Math.floor(Math.random() * 1000)}.png`);
+    const reqId = `gen_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+
+    // Store request metadata for completion save
+    pendingGenerationPrompts.set(reqId, {
+      prompt: params.prompt || '',
+      modelId: params.modelId || 'flux2-klein-4b',
+    });
 
     const req = {
-      id: `gen_${Date.now()}`,
+      id: reqId,
       prompt: params.prompt || '',
       model_id: params.modelId || 'flux2-klein-4b',
       width: Number(params.width) || 1024,
@@ -258,7 +315,7 @@ function registerIpcHandlers() {
       output_path: outputPath,
     };
 
-    return sidecarSupervisor.generateImage(req);
+    return supervisor.generateImage(req);
   });
 
   ipcMain.handle('auth:google-login', async () => ({
@@ -510,6 +567,11 @@ app.whenReady().then(() => {
 
 app.on('before-quit', () => {
   cleanupAuthServer();
+  try {
+    sidecarSupervisor?.stop();
+  } catch (error) {
+    logStartup('Failed to stop sidecar supervisor', error);
+  }
   try {
     db?.close();
   } catch (error) {

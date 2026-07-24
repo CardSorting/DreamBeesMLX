@@ -19,6 +19,9 @@ from typing import Dict, Any
 # Ensure stdout is line-buffered
 sys.stdout.reconfigure(line_buffering=True)
 
+# Global model instance cache across generations
+_LOADED_MODELS: Dict[str, Any] = {}
+
 def send_ipc(event_type: str, payload: Dict[str, Any]):
     """Emit structured JSON-RPC message to Electron main process over stdout."""
     msg = json.dumps({"type": event_type, "payload": payload})
@@ -140,6 +143,7 @@ def handle_generate(payload: Dict[str, Any]):
     mlx_status = check_mlx_metal()
 
     try:
+        import gc
         import mlx.core as mx
         from mflux.models.common.config import ModelConfig
         from mflux.models.flux2.variants import Flux2Klein
@@ -152,6 +156,7 @@ def handle_generate(payload: Dict[str, Any]):
         mx.set_cache_limit(cache_limit_bytes)
         mx.clear_cache()
         mx.reset_peak_memory()
+        gc.collect()
 
         class IPCStepwiseHandler(InLoopCallback):
             def __init__(self, model, total_steps, start_time):
@@ -226,21 +231,29 @@ def handle_generate(payload: Dict[str, Any]):
 
                 mx.clear_cache()
 
-        send_ipc("status", {"message": "Loading FLUX.2 Klein model weights..."})
+        send_ipc("status", {"message": "Accessing FLUX.2 Klein model weights..."})
         
-        model_config = ModelConfig.from_name("flux2-klein-4b")
-        model = Flux2Klein(
-            model_config=model_config,
-            quantize=4,
-        )
+        # Reuse model instance from global cache if available
+        global _LOADED_MODELS
+        if '_LOADED_MODELS' not in globals():
+            _LOADED_MODELS = {}
 
-        memory_saver = MemorySaver(model=model, keep_transformer=True, cache_limit_bytes=cache_limit_bytes)
-        model.callbacks.register(memory_saver)
+        if model_id not in _LOADED_MODELS:
+            model_config = ModelConfig.from_name("flux2-klein-4b")
+            model = Flux2Klein(
+                model_config=model_config,
+                quantize=4,
+            )
+            memory_saver = MemorySaver(model=model, keep_transformer=True, cache_limit_bytes=cache_limit_bytes)
+            model.callbacks.register(memory_saver)
+            _LOADED_MODELS[model_id] = model
+        else:
+            model = _LOADED_MODELS[model_id]
 
         handler = IPCStepwiseHandler(model=model, total_steps=steps, start_time=start_time)
         model.callbacks.register(handler)
 
-        send_ipc("status", {"message": "Executing FLUX.2 Metal GPU inference (Observability Phase 2)..."})
+        send_ipc("status", {"message": "Executing FLUX.2 Metal GPU inference..."})
 
         generated_image = model.generate_image(
             seed=seed,
@@ -255,8 +268,10 @@ def handle_generate(payload: Dict[str, Any]):
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         generated_image.image.save(output_path)
 
+        # Post-generation VRAM & Garbage Collection Cleanup
         mx.clear_cache()
         mx.reset_peak_memory()
+        gc.collect()
 
         duration_ms = int((time.time() - start_time) * 1000)
         

@@ -8,7 +8,6 @@ import { getOptimizedImageUrl } from '../lite-utils';
 import DreamInput from '../components/DreamInput';
 import PictureThumb from '../components/PictureThumb';
 import PreviewImage from '../components/PreviewImage';
-import { HardwareMonitor } from '../components/HardwareMonitor';
 import {
   AspectRatio,
   DEFAULT_ASPECT_RATIO,
@@ -116,11 +115,20 @@ export default function Generator() {
 
     if (window.electronAPI?.mlx) {
       try {
+        const dimMap: Record<string, { w: number; h: number }> = {
+          '1:1': { w: 1024, h: 1024 },
+          '16:9': { w: 1344, h: 768 },
+          '9:16': { w: 768, h: 1344 },
+          '3:4': { w: 768, h: 1024 },
+          '4:3': { w: 1024, h: 768 },
+        };
+        const dims = dimMap[aspectRatio] || { w: 1024, h: 1024 };
+
         await window.electronAPI.mlx.generateImage({
           prompt: submitted,
           modelId: selectedModel?.id || 'flux2-klein-4b',
-          width: 1024,
-          height: 1024,
+          width: dims.w,
+          height: dims.h,
           steps: 4,
           guidanceScale: 3.5,
         });
@@ -179,8 +187,6 @@ export default function Generator() {
         <h1>{greeting}</h1>
         <p>Write an idea, pick a style, tap create.</p>
       </header>
-
-      <HardwareMonitor />
 
       <main className="generator-layout">
         <aside className="input-column">

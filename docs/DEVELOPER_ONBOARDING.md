@@ -115,3 +115,27 @@ python3 tests/benchmarks/run_benchmarks.py
   }
 }
 ```
+
+---
+
+## 🔒 Memory Leak & Storage Persistence Architecture
+
+1. **SQLite Storage & Disk Pressure Guard**:
+   - Base64 images are offloaded to PNG files under `userData/generations/`, keeping DB rows small (~200 bytes).
+   - 2 GB byte-quota engine evicts oldest LRU files when disk cache budget is exceeded.
+   - Atomic file swapping (`.tmp` -> `fsyncSync` -> `renameSync`) prevents corrupted files on crash.
+
+2. **Sidecar & Main IPC Lifecycles**:
+   - Line-buffered stream decoding (`stdoutBuffer`) in `SidecarSupervisor` prevents unparsed JSON chunks.
+   - Singleton supervisor IPC binding (`ensureSidecarSupervisor()`) prevents duplicate event listeners.
+   - Process cleanup (`removeAllListeners()`) is invoked on child exit and app shutdown.
+
+3. **Metal VRAM & Python GC**:
+   - Model weights (`_LOADED_MODELS`) are cached globally to avoid re-reading disk weights on every generation.
+   - `mx.clear_cache()` and `gc.collect()` run after every generation pass to release Metal Unified Memory to macOS.
+
+4. **React DOM Memory Controls**:
+   - All IPC progress and completion listeners in `useEffect` return explicit unsubscription functions.
+   - Step previews in React state are capped to 16 items and base64 strings are evicted on unmount/completion.
+   - DOM image elements use `loading="lazy"` and `decoding="async"` to prevent V8 offscreen bitmap memory starvation.
+

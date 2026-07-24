@@ -7,6 +7,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getGenerations: (limit: number) => ipcRenderer.invoke('lite:getGenerations', limit),
     setSetting: (key: string, val: any) => ipcRenderer.invoke('lite:setSetting', key, val),
     getSetting: (key: string) => ipcRenderer.invoke('lite:getSetting', key),
+    optimizeDb: () => ipcRenderer.invoke('lite:optimizeDb'),
+    getStorageStats: () => ipcRenderer.invoke('lite:getStorageStats'),
+    purgeCache: () => ipcRenderer.invoke('lite:purgeCache'),
     googleLogin: () => ipcRenderer.invoke('auth:google-login'),
     getPendingLink: () => ipcRenderer.invoke('auth:get-pending-link'),
     onDeepLink: (callback: (url: string) => void) => {

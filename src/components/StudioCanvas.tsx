@@ -76,15 +76,19 @@ export const StudioCanvas: React.FC = () => {
         if (data.elapsed_ms) setElapsedMs(data.elapsed_ms);
         if (data.preview_url) {
           setLivePreviewUrl(data.preview_url);
-          setStepHistory((prev) => [
-            ...prev.filter((item) => item.step !== data.step),
-            {
-              step: data.step,
-              preview_url: data.preview_url,
-              step_ms: data.step_ms,
-              sigma_level: data.sigma_level,
-            },
-          ]);
+          setStepHistory((prev) => {
+            const next = [
+              ...prev.filter((item) => item.step !== data.step),
+              {
+                step: data.step,
+                preview_url: data.preview_url,
+                step_ms: data.step_ms,
+                sigma_level: data.sigma_level,
+              },
+            ];
+            // Keep at most 16 step previews to prevent React state memory retention
+            return next.slice(-16);
+          });
         }
         setStepTelemetry({
           step: data.step,
@@ -113,6 +117,8 @@ export const StudioCanvas: React.FC = () => {
       return () => {
         unsubProgress();
         unsubComplete();
+        setLivePreviewUrl(null);
+        setStepHistory([]);
       };
     }
   }, []);

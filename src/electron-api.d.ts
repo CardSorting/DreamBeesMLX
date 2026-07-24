@@ -18,6 +18,9 @@ export interface ElectronAPI {
     getGenerations: (limit: number) => Promise<any[]>;
     setSetting: (key: string, val: any) => Promise<void>;
     getSetting: (key: string) => Promise<any>;
+    optimizeDb?: () => Promise<{ ok: boolean }>;
+    getStorageStats?: () => Promise<{ dbSizeBytes: number; imageCacheSizeBytes: number; totalSizeBytes: number; maxQuotaBytes: number; itemCount: number }>;
+    purgeCache?: () => Promise<{ freedBytes: number }>;
     googleLogin?: () => Promise<{ idToken: string; accessToken?: string }>;
     getPendingLink?: () => Promise<string | null>;
     onDeepLink?: (callback: (url: string) => void) => () => void;

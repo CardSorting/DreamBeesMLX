@@ -138,6 +138,14 @@ export default function DreamInput({
   }, [suggestionsPrompt]);
 
   useEffect(() => {
+    return () => {
+      if (cooldownTimeoutRef.current) {
+        window.clearTimeout(cooldownTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (!showHelp) return;
     const handleOutsideClick = (e: MouseEvent) => {
       if (helpCardRef.current && !helpCardRef.current.contains(e.target as Node)) {

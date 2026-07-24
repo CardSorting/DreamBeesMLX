@@ -55,6 +55,17 @@ Add the following snippet to your `claude_desktop_config.json` or `mcp_config.js
 
 ---
 
+## 💾 Storage & Memory Leak Management
+
+### How does DreamBees prevent database bloat and disk erosion?
+DreamBees MLX includes an **Anti-Disk Erosion Persistence Engine**:
+1. **Base64 Image Externalization**: Generated base64 images are automatically saved as PNG files under `userData/generations/`, keeping SQLite rows lightweight (~200 bytes).
+2. **2 GB LRU Byte-Quota Engine**: Disk cache is capped under a strict 2 GB budget. When usage exceeds 2 GB, oldest LRU files are evicted until usage drops to 80% quota (1.6 GB).
+3. **Atomic File Swapping**: Image files are written to `.tmp` files first, flushed via `fsyncSync`, and atomically swapped with `renameSync` to eliminate corrupt 0-byte files on system crashes.
+4. **1-Click Storage Control**: Users can optimize database space and purge image cache in **Settings & Storage** (`src/pages/UserProfile.tsx`).
+
+---
+
 ## 🔧 Troubleshooting Common Issues
 
 ### Issue: "Missing MLX dependencies" error on launch

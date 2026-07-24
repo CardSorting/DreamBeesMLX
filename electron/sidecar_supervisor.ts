@@ -17,15 +17,18 @@ export interface MLXGenerationRequest {
 export class SidecarSupervisor extends EventEmitter {
   private child: ChildProcess | null = null;
   private isInitializing = false;
-  private heartbeatTimer: any = null;
+  private heartbeatTimer: NodeJS.Timeout | null = null;
+  private stdoutBuffer = '';
 
   constructor(private scriptPath: string) {
     super();
+    this.setMaxListeners(30);
   }
 
   public start(): void {
     if (this.child || this.isInitializing) return;
     this.isInitializing = true;
+    this.stdoutBuffer = '';
 
     try {
       const isUnix = process.platform !== 'win32';
@@ -42,7 +45,7 @@ export class SidecarSupervisor extends EventEmitter {
         path.join(process.env.HOME || '', '.local', 'bin'),
       ].join(':');
 
-      this.child = spawn(command, args, {
+      const child = spawn(command, args, {
         stdio: ['pipe', 'pipe', 'pipe'],
         env: {
           ...process.env,
@@ -51,28 +54,37 @@ export class SidecarSupervisor extends EventEmitter {
         },
       });
 
-      this.child.stdout?.on('data', (data: any) => {
-        const lines = data.toString('utf-8').split('\n');
+      this.child = child;
+
+      child.stdout?.on('data', (data: Buffer) => {
+        this.stdoutBuffer += data.toString('utf-8');
+        const lines = this.stdoutBuffer.split('\n');
+        // Keep the last incomplete line in buffer
+        this.stdoutBuffer = lines.pop() || '';
+
         for (const line of lines) {
-          if (!line.trim()) continue;
+          const trimmed = line.trim();
+          if (!trimmed) continue;
           try {
-            const parsed = JSON.parse(line.trim());
+            const parsed = JSON.parse(trimmed);
             this.emit('message', parsed);
           } catch {
-            // Non-JSON output (e.g. standard python prints)
-            this.emit('log', line.trim());
+            this.emit('log', trimmed);
           }
         }
       });
 
-      this.child.stderr?.on('data', (data: any) => {
+      child.stderr?.on('data', (data: Buffer) => {
         this.emit('log_error', data.toString('utf-8').trim());
       });
 
-      this.child.on('exit', (code: any, signal: any) => {
-        this.child = null;
-        this.stopHeartbeat();
+      child.on('exit', (code: number | null, signal: NodeJS.Signals | null) => {
+        this.cleanupChild();
         this.emit('exit', { code, signal });
+      });
+
+      child.on('error', (error: Error) => {
+        this.emit('error', error);
       });
 
       this.startHeartbeat();
@@ -83,13 +95,31 @@ export class SidecarSupervisor extends EventEmitter {
     }
   }
 
+  private cleanupChild(): void {
+    this.stopHeartbeat();
+    if (this.child) {
+      try {
+        this.child.stdout?.removeAllListeners();
+        this.child.stderr?.removeAllListeners();
+        this.child.removeAllListeners();
+      } catch {}
+      this.child = null;
+    }
+    this.stdoutBuffer = '';
+  }
+
   public sendCommand(action: string, payload: Record<string, any> = {}): boolean {
     if (!this.child || !this.child.stdin || this.child.stdin.destroyed) {
       return false;
     }
-    const msg = JSON.stringify({ action, payload }) + '\n';
-    this.child.stdin.write(msg);
-    return true;
+    try {
+      const msg = JSON.stringify({ action, payload }) + '\n';
+      this.child.stdin.write(msg);
+      return true;
+    } catch (err) {
+      console.warn('[sidecar] Failed to write command to stdin:', err);
+      return false;
+    }
   }
 
   public generateImage(req: MLXGenerationRequest): boolean {
@@ -115,8 +145,11 @@ export class SidecarSupervisor extends EventEmitter {
   public stop(): void {
     this.stopHeartbeat();
     if (this.child) {
-      this.child.kill('SIGTERM');
-      this.child = null;
+      try {
+        this.child.kill('SIGTERM');
+      } catch {}
+      this.cleanupChild();
     }
   }
 }
+

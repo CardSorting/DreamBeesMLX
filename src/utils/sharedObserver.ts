@@ -38,6 +38,7 @@ class IntersectionObserverManager {
   }
 
   public unobserve(element: Element) {
+    if (!this.callbacks.has(element)) return;
     this.callbacks.delete(element);
     if (this.observer) {
       this.observer.unobserve(element);

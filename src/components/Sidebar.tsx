@@ -16,8 +16,8 @@ export default function Sidebar() {
             <IconSparkles size={20} className="logo-icon" />
           </div>
           <div className="brand-meta">
-            <span className="brand-title">DreamBees MLX</span>
-            <span className="brand-version text-emerald-400">100% Local GPU</span>
+            <span className="brand-title">DreamBees Studio</span>
+            <span className="brand-version text-purple-400">Private Studio</span>
           </div>
         </div>
         <button 
@@ -46,10 +46,10 @@ export default function Sidebar() {
         <NavLink 
           to="/models" 
           className={({ isActive }) => `side-nav-item ${isActive ? 'active' : ''}`} 
-          data-tooltip="MLX Models"
+          data-tooltip="Model Styles"
         >
           <IconMagic size={20} />
-          <span className="nav-label">MLX Models</span>
+          <span className="nav-label">Model Styles</span>
           <div className="active-indicator" />
         </NavLink>
 
@@ -66,10 +66,10 @@ export default function Sidebar() {
         <NavLink 
           to="/profile" 
           className={({ isActive }) => `side-nav-item ${isActive ? 'active' : ''}`} 
-          data-tooltip="Studio Diagnostics"
+          data-tooltip="Settings & Storage"
         >
           <IconUser size={20} />
-          <span className="nav-label">Diagnostics</span>
+          <span className="nav-label">Settings & Storage</span>
           <div className="active-indicator" />
         </NavLink>
       </nav>
@@ -98,15 +98,15 @@ export default function Sidebar() {
             gap: '6px',
             transition: 'all 0.2s ease',
           }}
-          title="Re-run Touchless Onboarding & Hardware Setup Wizard"
+          title="Re-run Setup Wizard"
         >
           <IconSparkles size={14} />
-          {!sidebarCollapsed && <span>Touchless Onboarding</span>}
+          {!sidebarCollapsed && <span>Setup Wizard</span>}
         </button>
 
         <div className="network-status online">
-          <span className="status-dot animate-pulse bg-emerald-400" />
-          <span className="status-text text-emerald-400 font-mono text-xs">Apple Silicon Local</span>
+          <span className="status-dot animate-pulse bg-purple-400" />
+          <span className="status-text text-purple-300 font-medium text-xs">Ready & Private</span>
         </div>
       </div>
     </aside>

@@ -801,6 +801,41 @@ export function LiteProvider({ children }: { children: ReactNode }) {
         return () => window.removeEventListener('storage', handleStorage);
     }, [availableModels]);
 
+    // Live MLX Native IPC event listener with automatic lifecycle cleanup
+    useEffect(() => {
+        if (!window.electronAPI?.mlx) return;
+
+        const unsubProgress = window.electronAPI.mlx.onProgress((data: any) => {
+            setGenerating(true);
+            generatingRef.current = true;
+            if (data?.stage) {
+                setGenerationStage('processing');
+            }
+            if (typeof data?.progress_pct === 'number') {
+                setGenerationProgress(Math.min(99, Math.round(data.progress_pct)));
+            }
+            if (data?.preview_url) {
+                setGenerationPreviewUrl(data.preview_url);
+            }
+        });
+
+        const unsubComplete = window.electronAPI.mlx.onComplete((_data: any) => {
+            generatingRef.current = false;
+            setGenerating(false);
+            setGenerationStage('idle');
+            setGenerationProgress(100);
+            setGenerateStartTime(undefined);
+            setGenerationPreviewUrl(null);
+            setActiveGeneration(null);
+            loadLocal();
+        });
+
+        return () => {
+            unsubProgress?.();
+            unsubComplete?.();
+        };
+    }, [loadLocal]);
+
     useEffect(() => {
         if (!firebase) return;
         setModelsError(null);
