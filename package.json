@@ -19,11 +19,14 @@
     "build:electron:linux": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --linux",
     "build:electron:all": "vite build && CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --win --linux",
     "build:electron:notarized": "npm run preflight:mac-release && vite build && electron-builder -c.mac.notarize=true",
+    "build:mcp": "npx tsc -p mcp_server/tsconfig.json",
+    "mcp": "node mcp_server/dist/index.js",
     "verify:electron": "npm exec tsc -- --noEmit --pretty false && vite build && electron-builder --dir && node scripts/verify-electron-build.cjs",
     "preview": "vite preview",
     "test": "vitest run"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "better-sqlite3": "^12.9.0",
     "dotenv": "^17.2.3",
     "framer-motion": "^11.0.0",

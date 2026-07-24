@@ -1,17 +1,15 @@
 /**
  * Shared queue snapshot → UI state (used by generate + session resume).
  */
-import {
-  collection,
-  doc,
-  Firestore,
-  getDoc,
-  getDocs,
-  limit,
-  onSnapshot,
-  query,
-  where,
-} from 'firebase/firestore';
+export type Firestore = any;
+const collection = (...args: any[]) => ({}) as any;
+const doc = (...args: any[]) => ({}) as any;
+const getDoc = async (...args: any[]) => ({ exists: () => false, data: () => ({}) }) as any;
+const getDocs = async (...args: any[]) => ({ empty: true, docs: [] }) as any;
+const limit = (...args: any[]) => ({}) as any;
+const onSnapshot = (...args: any[]) => (() => {}) as any;
+const query = (...args: any[]) => ({}) as any;
+const where = (...args: any[]) => ({}) as any;
 import {
   ENQUEUE_RETRY_MESSAGE,
   GenerationStage,

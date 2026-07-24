@@ -1,0 +1,529 @@
+{
+  "timestamp": "2026-07-24 05:09:14",
+  "total_tests": 10,
+  "successful_tests": 10,
+  "failed_tests": 0,
+  "total_duration_ms": 161039,
+  "results": [
+    {
+      "test_id": "test_01_cyberpunk_neon",
+      "name": "Cyberpunk Neon City",
+      "category": "Sci-Fi / Cyberpunk",
+      "prompt": "Cyberpunk neon bee hovering over futuristic Tokyo night, volumetric neon light, highly detailed",
+      "seed": 42,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_01_cyberpunk_neon.png",
+      "success": true,
+      "duration_ms": 16357,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 2834,
+          "step_ms": 98,
+          "its_per_sec": 10.2,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3047,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 10.2 it/s (98ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10273,
+          "step_ms": 7438,
+          "its_per_sec": 0.13,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2112,
+            "peak_mb": 3635,
+            "cache_mb": 2076,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.13 it/s (7438ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_02_photorealistic_portrait",
+      "name": "Studio Portrait",
+      "category": "Photorealism",
+      "prompt": "Cinematic studio portrait of a woman in golden hour sunlight, 8k RAW photo, sharp focus, masterpiece",
+      "seed": 101,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_02_photorealistic_portrait.png",
+      "success": true,
+      "duration_ms": 17047,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 3520,
+          "step_ms": 108,
+          "its_per_sec": 9.26,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3047,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 9.26 it/s (108ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 11079,
+          "step_ms": 7558,
+          "its_per_sec": 0.13,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.13 it/s (7558ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_03_fantasy_landscape",
+      "name": "Fantasy Floating Islands",
+      "category": "Fantasy Landscape",
+      "prompt": "Floating islands above crystal blue clouds with waterfalls cascading into infinity, unreal engine 5 render",
+      "seed": 202,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_03_fantasy_landscape.png",
+      "success": true,
+      "duration_ms": 16239,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 3077,
+          "step_ms": 93,
+          "its_per_sec": 10.75,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3046,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 10.75 it/s (93ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10228,
+          "step_ms": 7151,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7151ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_04_macro_nature",
+      "name": "Macro Nature Dewdrop",
+      "category": "Macro Photography",
+      "prompt": "Extreme macro photography shot of a dewdrop reflecting a vibrant orchid petal, crystal clear refraction",
+      "seed": 303,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_04_macro_nature.png",
+      "success": true,
+      "duration_ms": 16269,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 3063,
+          "step_ms": 95,
+          "its_per_sec": 10.53,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3072,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 10.53 it/s (95ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10416,
+          "step_ms": 7353,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7353ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_05_architecture_brutalist",
+      "name": "Brutalist Cathedral",
+      "category": "Architecture",
+      "prompt": "Monolithic brutalist concrete cathedral covered in luminescent moss at dusk, dramatic moody lighting",
+      "seed": 404,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_05_architecture_brutalist.png",
+      "success": true,
+      "duration_ms": 15653,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 2950,
+          "step_ms": 89,
+          "its_per_sec": 11.24,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3046,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 11.24 it/s (89ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 9965,
+          "step_ms": 7015,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7015ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_06_anime_watercolor",
+      "name": "Anime Watercolor Countryside",
+      "category": "Anime / Illustration",
+      "prompt": "Studio Ghibli style watercolor illustration of a train crossing a summer field under fluffy white cumulus clouds",
+      "seed": 505,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_06_anime_watercolor.png",
+      "success": true,
+      "duration_ms": 15596,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 2895,
+          "step_ms": 88,
+          "its_per_sec": 11.36,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3097,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 11.36 it/s (88ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 9784,
+          "step_ms": 6888,
+          "its_per_sec": 0.15,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3644,
+            "cache_mb": 2110,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.15 it/s (6888ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_07_oil_painting",
+      "name": "Renaissance Oil Bee",
+      "category": "Fine Art",
+      "prompt": "Classical Renaissance oil painting of a mechanical clockwork bee, textured canvas impasto brushstrokes",
+      "seed": 606,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_07_oil_painting.png",
+      "success": true,
+      "duration_ms": 15805,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 3024,
+          "step_ms": 88,
+          "its_per_sec": 11.36,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3046,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 11.36 it/s (88ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10031,
+          "step_ms": 7007,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7007ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_08_minimalist_vector",
+      "name": "Minimalist Solar Eclipse",
+      "category": "Vector Graphic",
+      "prompt": "Minimalist flat vector poster of a solar eclipse over orange desert dunes, geometric aesthetic",
+      "seed": 707,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_08_minimalist_vector.png",
+      "success": true,
+      "duration_ms": 15780,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 2985,
+          "step_ms": 87,
+          "its_per_sec": 11.49,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3046,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 11.49 it/s (87ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10024,
+          "step_ms": 7039,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7039ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_09_dark_synthwave",
+      "name": "80s Synthwave Grid",
+      "category": "Retrofuturism",
+      "prompt": "80s synthwave retro highway extending into a wireframe neon grid sun, magenta glowing grid lines",
+      "seed": 808,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_09_dark_synthwave.png",
+      "success": true,
+      "duration_ms": 16023,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 2989,
+          "step_ms": 90,
+          "its_per_sec": 11.11,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3046,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 11.11 it/s (90ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10127,
+          "step_ms": 7137,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7137ms/step)"
+        }
+      ],
+      "error": null
+    },
+    {
+      "test_id": "test_10_glassmorphism_3d",
+      "name": "Glassmorphism Isometric Cube",
+      "category": "3D Render",
+      "prompt": "Frosted glass translucent isometric 3D cube geometry with colorful caustics, octane render 8k",
+      "seed": 909,
+      "output_path": "/Users/bozoegg/Downloads/DreamBeesAIArt-clean-main/tests/benchmarks/outputs/test_10_glassmorphism_3d.png",
+      "success": true,
+      "duration_ms": 16263,
+      "steps_count": 2,
+      "step_telemetry": [
+        {
+          "step": 1,
+          "total_steps": 2,
+          "progress_pct": 50,
+          "elapsed_ms": 3186,
+          "step_ms": 101,
+          "its_per_sec": 9.9,
+          "sigma_level": 0.5,
+          "flow_velocity": 0.5,
+          "snr_db": 0.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3569,
+            "cache_mb": 3072,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 1/2 \u2022 9.9 it/s (101ms/step)"
+        },
+        {
+          "step": 2,
+          "total_steps": 2,
+          "progress_pct": 100,
+          "elapsed_ms": 10391,
+          "step_ms": 7204,
+          "its_per_sec": 0.14,
+          "sigma_level": 0.0,
+          "flow_velocity": 1.0,
+          "snr_db": 30.0,
+          "vram": {
+            "active_mb": 2087,
+            "peak_mb": 3635,
+            "cache_mb": 2101,
+            "limit_mb": 3072
+          },
+          "preview_url": "",
+          "stage": "FLUX.2 Step 2/2 \u2022 0.14 it/s (7204ms/step)"
+        }
+      ],
+      "error": null
+    }
+  ]
+}

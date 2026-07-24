@@ -2,7 +2,7 @@
  * Pending-job recovery (history match, Firestore probe, failed cleanup).
  * Used by LiteContext resume, late-watcher, visibility, and online handlers.
  */
-import type { Firestore } from 'firebase/firestore';
+export type Firestore = any;
 import { probeCompletedGeneration } from './generationSession';
 import {
   finalizeClaimedPendingJob,

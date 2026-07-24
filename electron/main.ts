@@ -8,6 +8,10 @@ import { fileURLToPath } from 'url';
 import { GenerationRecord, LiteDatabase } from './database';
 import { SidecarSupervisor } from './sidecar_supervisor';
 import { ModelDownloader } from './model_downloader';
+import { TouchlessEnvironmentResolver } from './environment_resolver';
+
+// Touchless environment auto-resolver instance
+const touchlessResolver = new TouchlessEnvironmentResolver();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -202,6 +206,11 @@ function registerIpcHandlers() {
 
   ipcMain.handle('mlx:generateImage', async (_, params: any) => {
     if (!sidecarSupervisor) {
+      const envRes = await touchlessResolver.resolveEnvironment();
+      if (envRes.pythonPath) {
+        process.env.PYTHON_PATH = envRes.pythonPath;
+      }
+
       const scriptPath = path.join(__dirname, 'mlx/mlx_image_daemon.py');
       sidecarSupervisor = new SidecarSupervisor(scriptPath);
 

@@ -76,6 +76,34 @@ export default function Sidebar() {
 
       {/* Bottom Section */}
       <div className="sidebar-bottom">
+        <button
+          onClick={() => {
+            localStorage.removeItem('dreambees_touchless_setup_done');
+            window.location.reload();
+          }}
+          style={{
+            width: '100%',
+            marginBottom: '10px',
+            background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2))',
+            border: '1px solid rgba(168, 85, 247, 0.4)',
+            borderRadius: '12px',
+            padding: '8px 12px',
+            color: '#c084fc',
+            fontSize: '11px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            transition: 'all 0.2s ease',
+          }}
+          title="Re-run Touchless Onboarding & Hardware Setup Wizard"
+        >
+          <IconSparkles size={14} />
+          {!sidebarCollapsed && <span>Touchless Onboarding</span>}
+        </button>
+
         <div className="network-status online">
           <span className="status-dot animate-pulse bg-emerald-400" />
           <span className="status-text text-emerald-400 font-mono text-xs">Apple Silicon Local</span>

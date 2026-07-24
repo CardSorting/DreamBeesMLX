@@ -1,0 +1,19 @@
+{
+  "name": "dreambees-mlx-mcp-server",
+  "version": "1.4.20",
+  "description": "Model Context Protocol (MCP) Server for DreamBees MLX Apple Silicon Image Studio",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import SplashScreen from './components/SplashScreen';
+import { TouchlessInstallerWizard } from './components/TouchlessInstallerWizard';
 
 // Lazy load the database-bound context provider and app layout content
 const LazyLiteProvider = React.lazy(() => 
@@ -52,9 +53,25 @@ const AppLoadingFallback = () => (
 );
 
 function App() {
+  const [showWizard, setShowWizard] = React.useState(() => {
+    return !localStorage.getItem('dreambees_touchless_setup_done');
+  });
+
   return (
     <Router>
       <SplashScreen />
+      {showWizard && (
+        <TouchlessInstallerWizard
+          onComplete={(selectedTemplate) => {
+            localStorage.setItem('dreambees_touchless_setup_done', 'true');
+            if (selectedTemplate) {
+              localStorage.setItem('dreambees_auto_prompt', selectedTemplate.prompt);
+              localStorage.setItem('dreambees_auto_model', selectedTemplate.modelId);
+            }
+            setShowWizard(false);
+          }}
+        />
+      )}
       <Suspense fallback={<AppLoadingFallback />}>
         <LazyLiteProvider>
           <LazyAppContent />

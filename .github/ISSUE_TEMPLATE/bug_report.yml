@@ -1,0 +1,46 @@
+name: 🐛 Bug Report
+description: Report an issue or unexpected behavior in DreamBees MLX Studio
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please fill out the sections below to help us reproduce and resolve the issue quickly.
+
+  - type: input
+    id: environment
+    attributes:
+      label:  System Environment & Hardware
+      description: macOS version and Apple Silicon chip (e.g., macOS 15.2, M3 Max 36GB)
+      placeholder: e.g. macOS 15.2, Apple M3 Pro 18GB Unified Memory
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Bug Description
+      description: A clear description of what the bug is and what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 🔄 Steps To Reproduce
+      description: Detailed steps to reproduce the behavior.
+      placeholder: |
+        1. Open Studio Canvas
+        2. Select FLUX.2 Klein model
+        3. Click 'Generate'
+        4. See error message...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 📋 Log Output & Error Traceback
+      description: Paste any error messages from the terminal or log window.
+      render: shell

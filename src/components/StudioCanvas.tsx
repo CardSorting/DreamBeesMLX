@@ -24,7 +24,41 @@ export const StudioCanvas: React.FC = () => {
   const [progressStage, setProgressStage] = useState('');
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [livePreviewUrl, setLivePreviewUrl] = useState<string | null>(null);
+  const [stepTelemetry, setStepTelemetry] = useState<any>({});
+  const [showTelemetryDrawer, setShowTelemetryDrawer] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
+  const [stepHistory, setStepHistory] = useState<Array<any>>([]);
+  const [selectedStepPreview, setSelectedStepPreview] = useState<string | null>(null);
+  const [sliderPos, setSliderPos] = useState(50);
+  const [compareMode, setCompareMode] = useState(false);
+
+  useEffect(() => {
+    let timer: any = null;
+    if (isGenerating) {
+      const startTime = Date.now();
+      timer = setInterval(() => {
+        setElapsedMs(Date.now() - startTime);
+      }, 100);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isGenerating]);
+
+  useEffect(() => {
+    const autoPrompt = localStorage.getItem('dreambees_auto_prompt');
+    const autoModel = localStorage.getItem('dreambees_auto_model');
+    if (autoPrompt) {
+      setPrompt(autoPrompt);
+      if (autoModel) setSelectedModel(autoModel);
+      localStorage.removeItem('dreambees_auto_prompt');
+      localStorage.removeItem('dreambees_auto_model');
+      setTimeout(() => {
+        handleGenerate(autoPrompt);
+      }, 500);
+    }
+  }, []);
 
   useEffect(() => {
     if (window.electronAPI?.mlx) {
@@ -40,15 +74,38 @@ export const StudioCanvas: React.FC = () => {
         setProgressPct(data.progress_pct || 0);
         setProgressStage(data.stage || 'Rendering on Apple GPU...');
         if (data.elapsed_ms) setElapsedMs(data.elapsed_ms);
+        if (data.preview_url) {
+          setLivePreviewUrl(data.preview_url);
+          setStepHistory((prev) => [
+            ...prev.filter((item) => item.step !== data.step),
+            {
+              step: data.step,
+              preview_url: data.preview_url,
+              step_ms: data.step_ms,
+              sigma_level: data.sigma_level,
+            },
+          ]);
+        }
+        setStepTelemetry({
+          step: data.step,
+          total_steps: data.total_steps,
+          step_ms: data.step_ms,
+          its_per_sec: data.its_per_sec,
+          sigma_level: data.sigma_level,
+          flow_velocity: data.flow_velocity,
+          snr_db: data.snr_db,
+          vram: data.vram,
+        });
       });
 
       const unsubComplete = window.electronAPI.mlx.onComplete((data: any) => {
         setIsGenerating(false);
+        setLivePreviewUrl(null);
         if (data.auto_provisioned_model_id) {
           setSelectedModel(data.auto_provisioned_model_id);
         }
         if (data.output_path) {
-          setResultImage(`file://${data.output_path}`);
+          setResultImage(`file://${data.output_path}?t=${Date.now()}`);
         }
         if (data.duration_ms) setElapsedMs(data.duration_ms);
       });
@@ -60,19 +117,23 @@ export const StudioCanvas: React.FC = () => {
     }
   }, []);
 
-  const handleGenerate = async () => {
-    if (!prompt.trim() || isGenerating) return;
+  const handleGenerate = async (overridePrompt?: string) => {
+    const activePrompt = overridePrompt || prompt;
+    if (!activePrompt.trim() || isGenerating) return;
     setIsGenerating(true);
     setProgressPct(5);
     setProgressStage('Initializing MLX pipeline...');
     setResultImage(null);
+    setLivePreviewUrl(null);
+    setStepHistory([]);
+    setSelectedStepPreview(null);
 
     const actualSeed = typeof seed === 'number' ? seed : Math.floor(Math.random() * 1000000);
 
     if (window.electronAPI?.mlx) {
       try {
         await window.electronAPI.mlx.generateImage({
-          prompt: prompt.trim(),
+          prompt: activePrompt.trim(),
           modelId: selectedModel,
           width: selectedRatio.width,
           height: selectedRatio.height,
@@ -245,7 +306,7 @@ export const StudioCanvas: React.FC = () => {
 
           {/* Generate Button */}
           <button
-            onClick={handleGenerate}
+            onClick={() => handleGenerate()}
             disabled={!prompt.trim() || isGenerating}
             style={{
               width: '100%',
@@ -279,27 +340,107 @@ export const StudioCanvas: React.FC = () => {
         {/* Studio Viewport Canvas */}
         <div style={{ background: '#18181b', border: '1px solid #27272a', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '520px', position: 'relative' }}>
           {isGenerating && (
-            <div style={{ width: '80%', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <div style={{ background: '#a855f715', padding: '20px', borderRadius: '50%', border: '1px solid #a855f744' }}>
-                <Zap size={36} color="#c084fc" />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '18px', fontWeight: 600, margin: '0 0 6px 0' }}>{progressStage}</h3>
-                <p style={{ color: '#a1a1aa', fontSize: '13px', margin: 0 }}>Step progress on Apple Silicon Metal GPU</p>
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px' }}>
+              {/* Live Intermediate Diffusion Canvas Preview */}
+              {selectedStepPreview || livePreviewUrl ? (
+                <div style={{ position: 'relative', maxWidth: '100%', maxHeight: '380px', borderRadius: '12px', overflow: 'hidden', border: '1px solid #a855f766', boxShadow: '0 8px 30px rgba(168,85,247,0.25)' }}>
+                  <img
+                    src={selectedStepPreview || livePreviewUrl || ''}
+                    alt="Live Diffusion Latent"
+                    style={{ maxWidth: '100%', maxHeight: '380px', objectFit: 'contain', display: 'block' }}
+                  />
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(9, 9, 11, 0.85)', backdropFilter: 'blur(8px)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(168,85,247,0.4)', color: '#c084fc', fontSize: '11px', fontWeight: 700 }}>
+                    ⚡ {selectedStepPreview ? 'INSPECTING LATENT STEP SNAPSHOT' : 'LIVE MLX LATENT STREAM'}
+                  </div>
+                </div>
+              ) : (
+                <div className="animate-pulse" style={{ background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(236, 72, 153, 0.2))', padding: '24px', borderRadius: '50%', border: '1px solid rgba(168, 85, 247, 0.4)', boxShadow: '0 0 30px rgba(168, 85, 247, 0.3)' }}>
+                  <Zap size={42} color="#c084fc" />
+                </div>
+              )}
+
+              <div style={{ textAlign: 'center', width: '100%' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, margin: '0 0 8px 0', color: '#fff' }}>{progressStage}</h3>
+                
+                {/* Live Step Telemetry Observatory Bar */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '12px', margin: '8px 0' }}>
+                  <span style={{ color: '#c084fc', fontWeight: 700, background: 'rgba(168, 85, 247, 0.15)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(168, 85, 247, 0.3)' }}>
+                    ⏱️ {(elapsedMs / 1000).toFixed(1)}s Elapsed
+                  </span>
+                  {stepTelemetry.its_per_sec && (
+                    <span style={{ color: '#38bdf8', fontWeight: 700, background: 'rgba(56, 189, 248, 0.15)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                      🚀 {stepTelemetry.its_per_sec} it/s ({stepTelemetry.step_ms}ms/step)
+                    </span>
+                  )}
+                  {stepTelemetry.flow_velocity !== undefined && (
+                    <span style={{ color: '#a855f7', fontWeight: 700, background: 'rgba(168, 85, 247, 0.15)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(168, 85, 247, 0.3)' }}>
+                      ⚡ Velocity {stepTelemetry.flow_velocity}
+                    </span>
+                  )}
+                  {stepTelemetry.snr_db !== undefined && (
+                    <span style={{ color: '#eab308', fontWeight: 700, background: 'rgba(234, 179, 8, 0.15)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(234, 179, 8, 0.3)' }}>
+                      📶 SNR {stepTelemetry.snr_db} dB
+                    </span>
+                  )}
+                  {stepTelemetry.sigma_level !== undefined && (
+                    <span style={{ color: '#f43f5e', fontWeight: 600, background: 'rgba(244, 63, 94, 0.15)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(244, 63, 94, 0.3)' }}>
+                      σ = {stepTelemetry.sigma_level} Noise
+                    </span>
+                  )}
+                  {stepTelemetry.vram && (
+                    <span style={{ color: '#34d399', fontWeight: 600, background: 'rgba(52, 211, 153, 0.15)', padding: '4px 10px', borderRadius: '12px', border: '1px solid rgba(52, 211, 153, 0.3)' }}>
+                      💾 {(stepTelemetry.vram.active_mb / 1024).toFixed(1)}GB Active / {(stepTelemetry.vram.peak_mb / 1024).toFixed(1)}GB Peak VRAM
+                    </span>
+                  )}
+                  <span style={{ color: '#a1a1aa', background: '#09090b', padding: '4px 10px', borderRadius: '12px', border: '1px solid #27272a' }}>
+                     Metal GPU Capped (3GB)
+                  </span>
+                </div>
               </div>
 
-              {/* Progress Bar */}
-              <div style={{ width: '100%', background: '#09090b', borderRadius: '20px', height: '10px', overflow: 'hidden', border: '1px solid #27272a' }}>
+              {/* Step Latent History Thumbnail Rail */}
+              {stepHistory.length > 0 && (
+                <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '8px 4px', maxWidth: '90%' }}>
+                  {stepHistory.map((item) => (
+                    <div
+                      key={item.step}
+                      onClick={() => setSelectedStepPreview(item.preview_url)}
+                      style={{
+                        position: 'relative',
+                        width: '72px',
+                        height: '72px',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        border: selectedStepPreview === item.preview_url ? '2px solid #ec4899' : '1px solid #27272a',
+                        boxShadow: selectedStepPreview === item.preview_url ? '0 0 10px #ec4899' : 'none',
+                      }}
+                    >
+                      <img src={item.preview_url} alt={`Step ${item.step}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(9,9,11,0.85)', color: '#fff', fontSize: '9px', fontWeight: 700, textAlign: 'center', padding: '1px 0' }}>
+                        Step {item.step}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Dynamic Progress Bar */}
+              <div style={{ width: '90%', background: '#09090b', borderRadius: '20px', height: '12px', overflow: 'hidden', border: '1px solid #27272a' }}>
                 <div
                   style={{
-                    width: `${progressPct}%`,
+                    width: `${Math.max(5, progressPct)}%`,
                     height: '100%',
-                    background: 'linear-gradient(90deg, #a855f7, #ec4899)',
+                    background: 'linear-gradient(90deg, #a855f7, #ec4899, #8b5cf6)',
                     transition: 'width 0.2s ease',
+                    boxShadow: '0 0 15px #a855f7',
                   }}
                 />
               </div>
-              <span style={{ fontSize: '12px', color: '#71717a', fontWeight: 600 }}>{progressPct}% Completed</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '90%', fontSize: '12px', color: '#a1a1aa', fontWeight: 600 }}>
+                <span>Progress</span>
+                <span style={{ color: '#ec4899' }}>{progressPct}% Completed</span>
+              </div>
             </div>
           )}
 

@@ -1,0 +1,107 @@
+{
+  "suite_name": "DreamBees MLX Metal Benchmark Suite",
+  "version": "1.0.0",
+  "model": "flux2-klein-4b",
+  "test_cases": [
+    {
+      "id": "test_01_cyberpunk_neon",
+      "name": "Cyberpunk Neon City",
+      "category": "Sci-Fi / Cyberpunk",
+      "prompt": "Cyberpunk neon bee hovering over futuristic Tokyo night, volumetric neon light, highly detailed",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 42
+    },
+    {
+      "id": "test_02_photorealistic_portrait",
+      "name": "Studio Portrait",
+      "category": "Photorealism",
+      "prompt": "Cinematic studio portrait of a woman in golden hour sunlight, 8k RAW photo, sharp focus, masterpiece",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 101
+    },
+    {
+      "id": "test_03_fantasy_landscape",
+      "name": "Fantasy Floating Islands",
+      "category": "Fantasy Landscape",
+      "prompt": "Floating islands above crystal blue clouds with waterfalls cascading into infinity, unreal engine 5 render",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 202
+    },
+    {
+      "id": "test_04_macro_nature",
+      "name": "Macro Nature Dewdrop",
+      "category": "Macro Photography",
+      "prompt": "Extreme macro photography shot of a dewdrop reflecting a vibrant orchid petal, crystal clear refraction",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 303
+    },
+    {
+      "id": "test_05_architecture_brutalist",
+      "name": "Brutalist Cathedral",
+      "category": "Architecture",
+      "prompt": "Monolithic brutalist concrete cathedral covered in luminescent moss at dusk, dramatic moody lighting",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 404
+    },
+    {
+      "id": "test_06_anime_watercolor",
+      "name": "Anime Watercolor Countryside",
+      "category": "Anime / Illustration",
+      "prompt": "Studio Ghibli style watercolor illustration of a train crossing a summer field under fluffy white cumulus clouds",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 505
+    },
+    {
+      "id": "test_07_oil_painting",
+      "name": "Renaissance Oil Bee",
+      "category": "Fine Art",
+      "prompt": "Classical Renaissance oil painting of a mechanical clockwork bee, textured canvas impasto brushstrokes",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 606
+    },
+    {
+      "id": "test_08_minimalist_vector",
+      "name": "Minimalist Solar Eclipse",
+      "category": "Vector Graphic",
+      "prompt": "Minimalist flat vector poster of a solar eclipse over orange desert dunes, geometric aesthetic",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 707
+    },
+    {
+      "id": "test_09_dark_synthwave",
+      "name": "80s Synthwave Grid",
+      "category": "Retrofuturism",
+      "prompt": "80s synthwave retro highway extending into a wireframe neon grid sun, magenta glowing grid lines",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 808
+    },
+    {
+      "id": "test_10_glassmorphism_3d",
+      "name": "Glassmorphism Isometric Cube",
+      "category": "3D Render",
+      "prompt": "Frosted glass translucent isometric 3D cube geometry with colorful caustics, octane render 8k",
+      "width": 512,
+      "height": 512,
+      "steps": 2,
+      "seed": 909
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { spawn, ChildProcess } from 'child_process';
+import path from 'path';
 import EventEmitter from 'events';
 
 export interface MLXGenerationRequest {
@@ -27,8 +28,27 @@ export class SidecarSupervisor extends EventEmitter {
     this.isInitializing = true;
 
     try {
-      this.child = spawn('python3', [this.scriptPath], {
+      const isUnix = process.platform !== 'win32';
+      const pythonBin = process.env.PYTHON_PATH || 'python3';
+      const command = isUnix ? 'nice' : pythonBin;
+      const args = isUnix ? ['-n', '10', pythonBin, this.scriptPath] : [this.scriptPath];
+
+      // Touchless environment PATH expansion for Homebrew, Pyenv, Conda, and User Pythons
+      const envPath = [
+        process.env.PATH || '',
+        '/opt/homebrew/bin',
+        '/usr/local/bin',
+        path.join(process.env.HOME || '', '.pyenv', 'shims'),
+        path.join(process.env.HOME || '', '.local', 'bin'),
+      ].join(':');
+
+      this.child = spawn(command, args, {
         stdio: ['pipe', 'pipe', 'pipe'],
+        env: {
+          ...process.env,
+          PATH: envPath,
+          PYTHONUNBUFFERED: '1',
+        },
       });
 
       this.child.stdout?.on('data', (data: any) => {
